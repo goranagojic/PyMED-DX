@@ -33,7 +33,7 @@ questionnaires, enabling use in various languages and geographical regions.
   - [Metric calculation](#metric-calculation)
   - [Statistical analysis](#statistical-analysis)
   - [Visualizations](#visualizations)
-<!-- - [Example](#example) -->
+- [Example](#example)
 - [License](#license)
 
 [//]: # (- [Acknowledgments]&#40;#acknowledgments&#41;)
@@ -285,8 +285,22 @@ Options:
 
 For `QType1`, boxplot and histograms are ploted for diagnostic value grouped by (1) observers, and (2) datasets. For `QType2` plots are produced for Copeland score grouped by ML models.
 
-<!-- ## Example
-TODO pipeline example -->
+## Example data
+In `examples` directory of the repository, we provide test data that can be used as an input to the tool to generate both questionnaire types.
+
+### QType1
+Image path: `examples/qtype1/images`, observer filepath: `examples/qtype1`
+
+To generate questionnaires, the user should load the images, generate questions of `--qtype 1`, generate questionnaires (both regular and control), and export the questionnaires. 
+
+### QType2
+Image path: `examples/qtype2/images`, observer filepath: `examples/qtype2`
+
+To generate questionnaires, the user should load both reference images (`examples/qtype2/images/ml-outputs`) and ML model outputs (`examples/qtype2/images/originals`). Then the user can proceed to question generation (`--qtype 2`), questionnaire generation (regular only), and questionnaire export.
+
+
+After that, the user can complete the questionnaires to collect responses, which are then imported, and used for metric calculation, statistical analysis, and visualizations. For exact commands, see the section [Usage](#usage).
+
 
 
 ## License
