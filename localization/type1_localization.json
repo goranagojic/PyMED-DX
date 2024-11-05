@@ -1,0 +1,14 @@
+{
+    "title": "Question",
+    "description": "",
+    "question_explanation": "Please choose the option you agree with the most about the displayed fundus image.",
+    "positive_answer": "This image displays the signs of background",
+    "negative_answer": "I believe that this image does not show any of the listed conditions.",
+    "unclear_image_answer": "The image is not good enough for assessing the diagnosis.",
+    "certainty_question": "How certain are you in your response?",
+    "min_certain": "Uncertain",
+    "max_certain": "Certain",
+    "error_text": "Please answer the question.",
+    "thank_you_message": "Thank you for completing the questionnaire!",
+    "localization": "en"
+}
