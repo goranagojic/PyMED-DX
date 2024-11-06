@@ -1,12 +1,16 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 from pathlib import Path
 
 
-DATABASE_PATH = str(Path('database/survey.db?charset=utf8').resolve())
+project_dir = Path(__file__).resolve().parent.parent
+database_path = os.path.join(project_dir, 'database/survey.db?charset=utf8')
+# DATABASE_PATH = str(Path('database/survey.db?charset=utf8').resolve())
 
-SQLALCHEMY_CONN_STRING = 'sqlite:///' + DATABASE_PATH
+SQLALCHEMY_CONN_STRING = 'sqlite:///' + database_path
 
 # SQLAlchemy root class for ORM mapping, all classess that should be mapped must inherit this class
 Base = declarative_base()
