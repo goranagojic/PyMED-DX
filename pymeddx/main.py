@@ -13,7 +13,7 @@ from model.copeland_score import CopelandScore, CopelandScores
 from model.observer import Observers
 from model.question import *
 from model.response import Responses
-from utils.database import engine
+from utils.database import engine, Base
 
 Base.metadata.create_all(engine)
 

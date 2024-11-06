@@ -1,0 +1,232 @@
+[
+    {
+        "image_name": "002745",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "001549",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "001210",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "000819",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "003597",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "003945",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "002764",
+        "diagnoses": [{"token": "background_diabetic_retinopathy","name": "background diabetic retinopathy"}],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "002680",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "005118",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "004264",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "003553",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "005050",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "000633",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "000348",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "003537",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "004111",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "004036",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "001304",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "002670",
+        "diagnoses": [{"token": "background_diabetic_retinopathy","name": "background diabetic retinopathy"}],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "002367",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "000613",
+        "diagnoses": [{"token": "background_diabetic_retinopathy","name": "background diabetic retinopathy"}],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "003944",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "005077",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "000001",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "004776",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "003654",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "002409",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "000000",
+        "diagnoses": [{"token": "background_diabetic_retinopathy","name": "background diabetic retinopathy"}],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "003522",
+        "diagnoses": [{"token": "background_diabetic_retinopathy","name": "background diabetic retinopathy"}],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "001614",
+        "diagnoses": [{"token": "background_diabetic_retinopathy","name": "background diabetic retinopathy"}],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "005078",
+        "diagnoses": [{"token": "background_diabetic_retinopathy","name": "background diabetic retinopathy"}],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "002354",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "001194",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }         
+]

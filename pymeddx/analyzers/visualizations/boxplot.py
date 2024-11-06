@@ -68,7 +68,8 @@ def boxplot_datasets(qtype, output_dir, **kwargs):
 
     boxplot(
         data=data,
-        by=['model', 'dataset'],
+        # by=['model', 'dataset'],
+        by=['dataset'],
         column='value',
         type="datasets",
         output_dir=output_dir,
