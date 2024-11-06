@@ -365,4 +365,5 @@ $RECYCLE.BIN/
 
 
 pymeddx/database/*
+!pymeddx/database/.gitkeep
 pymeddx/logs/*
