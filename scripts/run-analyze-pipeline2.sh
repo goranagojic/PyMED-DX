@@ -2,13 +2,14 @@
 
 echo +x
 
-export PROJECTHOME="/home/gorana/Projects/PyMED-DX"
+export PROJECTHOME=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/..
 export TOOLHOME="${PROJECTHOME}/pymeddx"
 export PYTHONPATH="${TOOLHOME}":$PYTHONPATH
 
+
 # make space for new, empty db file
 if [ -f "${TOOLHOME}/database/survey.db" ]; then
-    echo "Database found on path ${TOOLHOME}/database/survey.db"
+    mv "${TOOLHOME}/database/survey.db" "${TOOLHOME}/database/survey.backup.db"
 fi
 
 # import results

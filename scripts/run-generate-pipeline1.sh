@@ -2,7 +2,7 @@
 
 echo +x
 
-export PROJECTHOME="/home/gorana/Projects/PyMED-DX"
+export PROJECTHOME=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/..
 export TOOLHOME="${PROJECTHOME}/pymeddx"
 export PYTHONPATH="${TOOLHOME}":$PYTHONPATH
 
@@ -11,7 +11,6 @@ export PYTHONPATH="${TOOLHOME}":$PYTHONPATH
 if [ -f "${TOOLHOME}/database/survey.db" ]; then
     mv "${TOOLHOME}/database/survey.db" "${TOOLHOME}/database/survey.backup.db"
 fi
-
 
 # load observers
 python "${TOOLHOME}/main.py" load observers --filepath "${PROJECTHOME}/examples/observers.json"
