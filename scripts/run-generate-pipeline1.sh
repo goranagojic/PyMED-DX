@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo +x
-
 export PROJECTHOME=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/..
 export TOOLHOME="${PROJECTHOME}/pymeddx"
 export PYTHONPATH="${TOOLHOME}":$PYTHONPATH

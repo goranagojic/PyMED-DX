@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo +x
-
 export PROJECTHOME=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/..
 export TOOLHOME="${PROJECTHOME}/pymeddx"
 export PYTHONPATH="${TOOLHOME}":$PYTHONPATH
@@ -13,7 +11,7 @@ if [ -f "${TOOLHOME}/database/survey.db" ]; then
 fi
 
 # copy prepared database
-cp "${PROJECTHOME}/examples/qtype1/survey.db" "${TOOLHOME}/database/"
+#cp "${PROJECTHOME}/examples/qtype1/survey.db" "${TOOLHOME}/database/"
 
 # import results
 python "${TOOLHOME}/main.py" load responses --directory "${PROJECTHOME}/examples/qtype1/responses" --qtype 1
