@@ -41,8 +41,8 @@ command "Step 5b: Export control questionnaires to html." "python ${TOOLHOME}/ma
 # At this point the questionnaires should be filled out
 # and the results should be prepare like in the folder:
 # "examples/qtype1/responses". Because this is an example
-# we have prepared a database and results to show how to
-# load and analyze results.
+# we have prepared a database and the results to show how
+# to load and analyze them.
 read -p $'DISCLAIMER! We have already done the Step 6, for you, but at this point the\nquestionnaires should be filled out and the results should be prepared.\nJust press ENTER to continue with the example.\n'
 cp "${PROJECTHOME}/examples/qtype1/survey.db" "${TOOLHOME}/database/"
 
