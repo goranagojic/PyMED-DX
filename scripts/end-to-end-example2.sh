@@ -18,22 +18,22 @@ if [ -f "${TOOLHOME}/database/survey.db" ]; then
 fi
 
 # Load observers
-#command "Step 1: Load observers." "python ${TOOLHOME}/main.py load observers --filepath ${PROJECTHOME}/examples/observers.json"
+command "Step 1: Load observers." "python ${TOOLHOME}/main.py load observers --filepath ${PROJECTHOME}/examples/observers.json"
 
 # Load reference images
-#command "Step 2a: Load reference images." "python ${TOOLHOME}/main.py load images -d ${PROJECTHOME}/examples/qtype2/images/originals -e .png -q 2 -m originals.json"
+command "Step 2a: Load reference images." "python ${TOOLHOME}/main.py load images -d ${PROJECTHOME}/examples/qtype2/images/originals -e .png -q 2 -m originals.json"
 
 # Load reference images
-#command "Step 2b: Load ML model images." "python ${TOOLHOME}/main.py load images -d ${PROJECTHOME}/examples/qtype2/images/ml-outputs -e .png -q 2 -m ml-outputs.json"
+command "Step 2b: Load ML model images." "python ${TOOLHOME}/main.py load images -d ${PROJECTHOME}/examples/qtype2/images/ml-outputs -e .png -q 2 -m ml-outputs.json"
 
 # Generate questions
-#command "Step 3: Generate questions in the database." "python ${TOOLHOME}/main.py generate questions --qtype 2"
+command "Step 3: Generate questions in the database." "python ${TOOLHOME}/main.py generate questions --qtype 2"
 
 # Generate questionnaires
-#command "Step 4: Generate questionnaires in database." "python ${TOOLHOME}/main.py generate questionnaire --qtype 2"
+command "Step 4: Generate questionnaires in database." "python ${TOOLHOME}/main.py generate questionnaire --qtype 2"
 
 # Export regular questionnaires
-#command "Step 5: Export questionnaires to html." "python ${TOOLHOME}/main.py export --directory ${PROJECTHOME}/examples/qtype2/questionnaires --format html --qtype 2"
+command "Step 5: Export questionnaires to html." "python ${TOOLHOME}/main.py export --directory ${PROJECTHOME}/examples/qtype2/questionnaires --format html --qtype 2"
 
 # At this point the questionnaires should be filled out
 # and the results should be prepare like in the folder:
