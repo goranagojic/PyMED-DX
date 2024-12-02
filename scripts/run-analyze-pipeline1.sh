@@ -11,7 +11,7 @@ if [ -f "${TOOLHOME}/database/survey.db" ]; then
 fi
 
 # copy prepared database
-#cp "${PROJECTHOME}/examples/qtype1/survey.db" "${TOOLHOME}/database/"
+cp "${PROJECTHOME}/examples/qtype1/survey.db" "${TOOLHOME}/database/"
 
 # import results
 python "${TOOLHOME}/main.py" load responses --directory "${PROJECTHOME}/examples/qtype1/responses" --qtype 1
