@@ -28,21 +28,3 @@ python "${TOOLHOME}/main.py" generate questionnaire --qtype 2 --qsubtype regular
 
 # export export 
 python "${TOOLHOME}/main.py" export --directory "${PROJECTHOME}/examples/qtype2/questionnaires" --format html --qtype 2 --qsubtype regular
-
-# import results
-#python main.py load responses --directory /home/gorana/Projects/softwarex-integration/database/s2-2 --qtype 2
-
-# calculate copeland score
-# python main.py 
-
-# run stats - inter observer
-# python main.py 
-
-# run stats - intra observer
-# python main.py 
-
-# run visualizations - boxplot
-# python main.py 
-
-# run visualizations - histograms
-# python main.py 

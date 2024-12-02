@@ -10,7 +10,7 @@ if [ -f "${TOOLHOME}/database/survey.db" ]; then
     mv "${TOOLHOME}/database/survey.db" "${TOOLHOME}/database/survey.backup.db"
 fi
 
-#cp "${PROJECTHOME}/examples/qtype2/survey.db" "${TOOLHOME}/database/"
+wget 'https://drive.usercontent.google.com/download?id=1hWfYeN2rRHg3uBFlAJXRzwfqfGEJqm0_&export=download&authuser=1&confirm=t' -O "${TOOLHOME}/database/survey.db"
 
 # import results
 python "${TOOLHOME}/main.py" load responses --directory "${PROJECTHOME}/examples/qtype2/responses" --qtype 2
