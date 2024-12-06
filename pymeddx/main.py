@@ -237,7 +237,7 @@ def metrics(qtype, mtype):
                     diagnostic_score = DiagnosticScore(r)
                     DiagnosticScores.insert(diagnostic_score)
                     logger.debug(f"Inserted diagnostic score to the database: ({r.id}, {diagnostic_score})")
-                logger.info(f"Diagnostic value calculation done!")
+            logger.info(f"Diagnostic value calculation done!")
         else:
             logger.error(f"Unsupported metric type '{mtype}' for qtype {qtype}. Consider using a different "
                          f"questionnaire type.")
@@ -258,8 +258,6 @@ def metrics(qtype, mtype):
                 logger.info(f"The presented scores are averaged across images produced by the same model.")
                 for i, (model, score) in enumerate(model_scores):
                     logger.info(f"[{i}] {model}: {score}")
-
-                logger.info(f"\nNext, you can run commands to visualize Copeland scores.")
             else:
                 logger.error(f"Copeland scores per models could not be printed because the resulting list is empty. "
                              f"Check if Copeland scores has been calculated or if images have assigned model names.")

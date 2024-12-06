@@ -40,23 +40,23 @@ command "Step 5: Export questionnaires to html." "python ${TOOLHOME}/main.py exp
 # "examples/qtype2/responses". Because this is an example
 # we have prepared a database and some results to show how to
 # load and analyze them.
-read -p $'DISCLAIMER! We have already done the Step 6, for you, but at this point the\nquestionnaires should be filled out and the results should be prepared.\nThe database file is too large for git. Therefore, we have stored it on\ngoogle drive and it will automatically download to the correct location.\nJust press ENTER to continue with the example or press CTRL+C to abort.\n'
+read -p $'DISCLAIMER! At this stage, the questionnaires exported in the previous step,\nshould be completed by human experts. For the purposes of an end-to-end\npipeline demonstration, we provide prefilled questionnaires along with a\ncorresponding database file, which will be downloaded in this step. After\nthis the demonstration will proceed to the response import process.\nPress ENTER to continue or press CTRL+C to abort.\n'
 wget 'https://drive.usercontent.google.com/download?id=1hWfYeN2rRHg3uBFlAJXRzwfqfGEJqm0_&export=download&authuser=1&confirm=t' -O "${TOOLHOME}/database/survey.db"
 
 # Import results
-command "Step 7: Load responses to the datapase." "python ${TOOLHOME}/main.py load responses --directory ${PROJECTHOME}/examples/qtype2/responses --qtype 2"
+command "Step 6: Load responses to the database." "python ${TOOLHOME}/main.py load responses --directory ${PROJECTHOME}/examples/qtype2/responses --qtype 2"
 
 # Calculate the Copeland score
-command "Step 8: Analyze the data that was loaded." "python ${TOOLHOME}/main.py analyze metrics --qtype 2 --mtype cs"
+command "Step 7: Analyze the data that was loaded." "python ${TOOLHOME}/main.py analyze metrics --qtype 2 --mtype cs"
 
 # Run stats - inter observer
-command "Step 9: Run inter observer statistics." "python ${TOOLHOME}/main.py analyze stats --qtype 2 --stype inter"
+command "Step 8: Run inter observer statistics." "python ${TOOLHOME}/main.py analyze stats --qtype 2 --stype inter"
 
 # Run stats - intra observer
-command "Step 10: Run intra observer 1 statistics." "python ${TOOLHOME}/main.py analyze stats --qtype 2 --stype intra --oid 1"
+command "Step 9: Run intra observer 1 statistics." "python ${TOOLHOME}/main.py analyze stats --qtype 2 --stype intra --oid 1"
 
 # Run visualizations - boxplot
-command "Step 11: Export boxplot based on results." "python ${TOOLHOME}/main.py analyze visual --qtype 2 --vtype boxplot --directory ${PROJECTHOME}/examples/qtype2/plots"
+command "Step 10: Export boxplot based on results." "python ${TOOLHOME}/main.py analyze visual --qtype 2 --vtype boxplot --directory ${PROJECTHOME}/examples/qtype2/plots"
 
 # Run visualizations - histograms
-command "Step 12: Export histogram based on results." "python ${TOOLHOME}/main.py analyze visual --qtype 2 --vtype histogram --directory ${PROJECTHOME}/examples/qtype2/plots"
+command "Step 11: Export histogram based on results." "python ${TOOLHOME}/main.py analyze visual --qtype 2 --vtype histogram --directory ${PROJECTHOME}/examples/qtype2/plots"
