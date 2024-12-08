@@ -287,7 +287,50 @@ For `QType1`, boxplot and histograms are ploted for diagnostic value grouped by 
 
 ## Examples
 
-The `scripts` directory contains scripts to run both the generator and analyzer components of the pipeline for both questionnaire types. Before running these scripts, ensure that the `PROJECTHOME` variable in each script points to the correct path. Note that the example scripts are designed for Linux systems only and aim to demonstrate the complete usage pipeline of the tool.
+The `scripts` directory contains scripts to run end-to-end examples for both questionnaire types. It also contains both the generator and analyzer components of the pipeline, separately, again for both questionnaire types. Note that the example scripts are designed for Linux systems only and aim to demonstrate the complete usage pipeline of the tool.
+
+### End-to-end examples
+
+There are two ways to run the end-to-end examples that are provided. GIT Codespaces and native Linux.
+
+#### GIT Codespaces
+
+The prefered way to run the examples is to use GIT Codespaces and let GIT prepare and install the whole environment for you. After the Codespace is ready, you only have to run one of the two scripts provided like this:
+
+```bash
+./scripts/end-to-end-example1.sh
+```
+
+or
+
+```bash
+./scripts/end-to-end-example2.sh
+```
+
+#### Running on your local Linux machine
+
+In order to run the examples directly on your Linux machine, we suggest running these commands in the terminal, but first make sure you position yourself in the desired directory:
+
+```bash
+git clone https://github.com/goranagojic/PyMED-DX
+cd PyMED-DX
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt 
+```
+
+After these commands you can run the following commands to run the en-to-end pipelines:
+
+```bash
+./scripts/end-to-end-example1.sh
+```
+
+or
+
+```bash
+./scripts/end-to-end-example1.sh
+```
+
 
 ### Example data
 The scripts use input images from `examples/qtype1/images` for *QType1* and `examples/qtype2/images` for *QType2.* The images for *QType* one are part of publicly available [DRIVE](https://ieeexplore.ieee.org/document/1282003) fundus image dataset. The reference images used in *QType* are also from DRIVE dataset, and the machine learning outputs are generated from DRIVE images using publicly available deep neural networks.

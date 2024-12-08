@@ -1,15 +1,16 @@
 #!/bin/bash
 
-echo +x
-
-export PROJECTHOME="/home/gorana/Projects/PyMED-DX"
+export PROJECTHOME=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/..
 export TOOLHOME="${PROJECTHOME}/pymeddx"
 export PYTHONPATH="${TOOLHOME}":$PYTHONPATH
 
+
 # make space for new, empty db file
 if [ -f "${TOOLHOME}/database/survey.db" ]; then
-    echo "Database found on path ${TOOLHOME}/database/survey.db"
+    mv "${TOOLHOME}/database/survey.db" "${TOOLHOME}/database/survey.backup.db"
 fi
+
+wget 'https://drive.usercontent.google.com/download?id=1hWfYeN2rRHg3uBFlAJXRzwfqfGEJqm0_&export=download&authuser=1&confirm=t' -O "${TOOLHOME}/database/survey.db"
 
 # import results
 python "${TOOLHOME}/main.py" load responses --directory "${PROJECTHOME}/examples/qtype2/responses" --qtype 2

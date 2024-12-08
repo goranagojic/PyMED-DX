@@ -128,8 +128,9 @@ class ResponseType2(Response):
         self.img1_id = int(img1_id)
         self.img2_id = int(img2_id)
 
-        qim_im1 = self.question.im1
-        qim_im2 = self.question.im2
+        with session.no_autoflush: # FIXME autoflush warning
+            qim_im1 = self.question.im1
+            qim_im2 = self.question.im2
 
         assert self.img1_id == qim_im1.id
         self.img1 = qim_im1
