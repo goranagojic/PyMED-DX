@@ -295,7 +295,11 @@ There are two ways to run the end-to-end examples that are provided. GIT Codespa
 
 #### GIT Codespaces
 
-The prefered way to run the examples is to use GIT Codespaces and let GIT prepare and install the whole environment for you. After the Codespace is ready, you only have to run one of the two scripts provided like this:
+The preferred way to run the examples is to use GIT Codespaces and let GIT prepare and install the whole environment for you. To run a new codespace click on the arrow on the green `Code` button, select a `Codespaces` tab, and create a Codespace as displayed in the following image.
+
+<img src="assets/codespaces.gif" width="500" align="center" />
+
+After the Codespace is ready (this might take a minute or two), you can run one of the two scripts provided like this:
 
 ```bash
 ./scripts/end-to-end-example1.sh
@@ -332,7 +336,7 @@ or
 ```
 
 
-### Example data
+### Example data explanation
 The scripts use input images from `examples/qtype1/images` for *QType1* and `examples/qtype2/images` for *QType2.* The images for *QType* one are part of publicly available [DRIVE](https://ieeexplore.ieee.org/document/1282003) fundus image dataset. The reference images used in *QType* are also from DRIVE dataset, and the machine learning outputs are generated from DRIVE images using publicly available deep neural networks.
 
 Here is an outline of `examples` directory.
@@ -352,31 +356,6 @@ examples/
     ├── plots/
     └── note.txt          -- database file for qtype2 is big, see download link
 ```
-
-### Pipeline demonstration
-The following steps demonstrate how to run the scripts for *QType1*. Similar steps apply for *QType2*.
-
-To run the complete pipeline, start with the generator script. This script populates the database, generates questionnaires, and exports them:
-
-```bash
-./scripts/run-generate-pipeline1.sh
-```
-
-Upon successful completion, the generated questionnaires will be available at `examples/qtype1/questionnaires`. After completing the questionnaires and storing the results in the appropriate responses subdirectory, run the analyzer script:
-
-```bash
-./scripts/run-analyze-pipeline.sh
-```
-
-Once the analyzer script finishes, it will print inter- and intra-observer agreement scores for various methods in the console and save boxplots and histograms in `examples/qtype1/plots`.
-
-> [!IMPORTANT]
-> Ensure you use the database containing the appropriate questionnaires when importing the responses.
-
-
-### Partialy reproduce the pipeline
-If you prefer not to complete the questionnaires but want to test the analyzer component of the pipeline, use the provided database and response files from the examples directory. Copy the database file to the `pymeddx/database/` directory and run the analyzer script using the provided responses.
-
 
 ## License
 This project is licensed under the Apache License 2.0 - see the [LICENSE](./LICENSE) file for details.
