@@ -39,6 +39,7 @@ class SurveyGenerator:
             a possible number of surveys that can be generated, the method generate as many surveys as it can.
         :return:
         """
+        n_original, n_repeated = 0, 0
         while True:     # iterate while there are more questions to include in some of the surveys
             if self.survey_type == "regular":
                 questions = Questions.get_unassigned()
@@ -62,6 +63,11 @@ class SurveyGenerator:
                 survey.questions.append(question)
                 logger.info(f"Added question {question.id} to survey {survey.id}.")
 
+                if isinstance(survey, RegularSurvey):
+                    n_original += 1
+                else:
+                    n_repeated += 1
+
             # warn if the survey is assigned less questions then requested
             if len(survey.questions) != self.questions_per_survey:
                 logger.warning(f"Survey {survey.id} have {len(survey.questions)} questions instead of "
@@ -79,6 +85,34 @@ class SurveyGenerator:
                 n_surveys -= 1
                 if n_surveys == 0:
                     break
+
+        ssize_inter, ssize_intra = n_original, n_repeated
+        if ssize_intra == 0:
+            logger.info("")
+            logger.info("*" * 100)
+            logger.info(
+                f"Expected sample size for inter-observer agreement methods is {ssize_inter} (per observer).")
+            logger.info(f"Use the reported sample size if you want to check if the sample size is large enough to produce "
+                        f"reliable results using inter-observer agreement methods (Cohen's kappa and Kripptendorff's"
+                        f" alpha) and significance level, effect size, and statistical power you need. "
+                        f"To do that, we recommend using specialized software for sample size calculation, e.g. GPower "
+                        f"(https://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower), "
+                        f"or online calculators such as Sample Size Calculator (https://wnarifin.github.io/ssc_web.html).")
+            logger.info("*" * 100)
+        else:
+            logger.info("")
+            logger.info("*" * 100)
+            ssize_intra = len(questions)
+            logger.info(
+                f"Expected sample size for intra-observer agreement methods is {ssize_intra} (per observer).")
+            logger.info(
+                f"Use the reported sample size if you want to check if the sample size is large enough to produce "
+                f"reliable results using intra-observer agreement methods (Cronbach's alpha, ICC, Guttman's lambda) and "
+                f"significance level, effect size, and statistical power you need. To do that, we recommend using "
+                f"specialized software for sample size calculation, e.g. GPower "
+                f"(https://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower), "
+                f"or online calculators such as Sample Size Calculator (https://wnarifin.github.io/ssc_web.html).")
+            logger.info("*" * 100)
 
     @staticmethod
     def export_surveys(where, export_type="json", survey_type="regular"):

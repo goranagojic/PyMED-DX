@@ -459,6 +459,9 @@ class Questions:
         Questions.bulk_insert(questions)
         logger.debug(f"Inserted {len(questions)} questions to the database.")
 
+        # how many questions are generated, this is for regular measurements
+        # n_questions = len(questions)
+
         # GENERATE REPEATED QUESTIONS
         duplicates = list()
         for idx, (im1, im2) in zip(iindices, dupes):
@@ -541,6 +544,25 @@ class Questions:
                         raise ValueError(f"There are no images associated with a group {gid}. Aborting.")
                     qt = Questions.generate_questions_t2(gid, image_group, n_repeat)
                     questions.extend(qt)
+
+                n_model = len(Images.get_whole_group(min_group_id))
+                n_images = max_group_id - min_group_id + 1
+                ssize_inter = n_images * (n_model * (n_model - 1)) // 2
+
+                logger.info("")
+                logger.info("*" * 100)
+                logger.info(f"Expected sample size for inter-observer agreement methods is {ssize_inter} (per observer).")
+                ssize_intra = ssize_inter // 2
+                logger.info(f"Expected sample size for intra-observer agreement methods is {ssize_intra} (per observer).")
+                logger.info(f"Use the reported sample sizes if you want to check if the sample size is large enough to produce "
+                            f"reliable results for inter- and intra-observer agreement methods and desired significance "
+                            f"level, effect size, and statistical power. For Cohen's kappa and Krippendorff's alpha use "
+                            f"the reported sample size for inter-observer agreement. For Cronbach's alpha, Guttman's "
+                            f"lambda, and ICC use the sample reported for intra-observer agreement. To do that, we "
+                            f"recommend using specialized software for sample size calculation, e.g. GPower "
+                            f"(https://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower), "
+                            f"or online calculators such as Sample Size Calculator (https://wnarifin.github.io/ssc_web.html).")
+                logger.info("*" * 100)
             else:
                 logger.error(f"Unsupported question type '{qtype}'.")
 
