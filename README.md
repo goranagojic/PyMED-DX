@@ -1,18 +1,18 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](/LICENSE)
 
-# PyMED-DX: A Python Tool for Diagnostic Value Evaluation in Medical Images
+# PyMED-DX: A Python Tool for Diagnostic Value Evaluation in 2D Medical Images
 
 **PyMED-DX** is a Python-based tool designed to streamline subjective evaluation studies in the medical field, focusing on 
-the diagnostic value of medical images. With minimal technical skills required, researchers can generate customizable 
+the diagnostic value of 2D medical images. With minimal technical skills required, researchers can generate customizable 
 questionnaires, collect and analyze observer responses. PyMED-DX is cross-platform and released under the 
 Apache License 2.0.
 
 Main features:
 - **Predefined Questionnaire Templates**: Creates two types of questionnaires that can be customized with user-specific 
 data. Two questionnaire types are supported:
-  - _QType 1:_ The primary questionnaire type focuses on assessing the diagnostic value of medical images.
+  - _QType 1:_ The primary questionnaire type focuses on assessing the diagnostic value of 2D medical images.
   - _QType 2:_ Additional type supports subjective evaluation of machine learning models used in clinical settings 
-  to produce image outputs.
+  to produce 2D image outputs.
 - **Image and Response Analysis**: Collect, aggregate, and analyze responses, supporting diagnostic studies and repeatability evaluation.
 - **Automated Metrics Calculation**: Calculate metrics and statistical analyses of observer agreement on response data.
 - **Randomization**: Shuffle questions in a questionnaire to mitigate the memory effect in surveys.
@@ -83,9 +83,9 @@ Example contents of the file with observer data:
 
 
 ### Loading image data
-Loads images with specific file extensions from a given directory into the database alongside their metadata if available. 
+Loads images with specific file extensions from a given directory into the database alongside their metadata if available. At the moment the tool has built-in support for 2D images only. 
 
-Only paths to the image files are loaded so that images are loaded during operations that require image data. Once loaded to the database, the images should not be moved to another location. If moved, the paths in the Image database table should be updated.
+Only paths to the image files are loaded so that images are loaded during operations that require image data. Once loaded to the database, the images **should not be moved to another location**. If moved, the paths in the Image database table should be updated.
 
 
 ```bash
@@ -283,7 +283,7 @@ Options:
 - `--vtype`, `-v` - Visualization type. Currently supported `boxplot` and `histogram`.
 - `--directory`, `-d` - Where to save the plots.
 
-For `QType1`, boxplot and histograms are ploted for diagnostic value grouped by (1) observers, and (2) datasets. For `QType2` plots are produced for Copeland score grouped by ML models.
+For `QType1`, boxplot and histograms are ploted for diagnostic value grouped by (1) observers, and (2) datasets. For `QType2` plots are produced for ratings grouped by ML models.
 
 ## Examples
 
@@ -310,6 +310,10 @@ or
 ```bash
 ./scripts/end-to-end-example2.sh
 ```
+
+> [!IMPORTANT]
+> **Note for QType 1 questionnaires.** 
+> If you want to download questionnaires from the Codespace to your local machine, make sure to also download the images directory and place it in the same location as the questionnaires locally. Otherwise, the images in the questionnaires will not be displayed.
 
 #### Running on your local Linux machine
 
