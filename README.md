@@ -323,7 +323,7 @@ source venv/bin/activate
 pip install -r requirements.txt 
 ```
 
-After these commands you can run the following commands to run the en-to-end pipelines:
+After these commands you can run the following commands to run the end-to-end pipelines:
 
 ```bash
 ./scripts/end-to-end-example1.sh
@@ -332,7 +332,7 @@ After these commands you can run the following commands to run the en-to-end pip
 or
 
 ```bash
-./scripts/end-to-end-example1.sh
+./scripts/end-to-end-example2.sh
 ```
 
 
