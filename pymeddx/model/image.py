@@ -168,7 +168,7 @@ class Images:
         images = list()
         if extensions is not None or len(extensions) != 0:
             if qtype == 1:
-                images = [Image(img_path) for img_path in img_paths if img_path.suffix.lower() in extensions]
+                images = [Image(img_path, dataset=img_path.parent.name) for img_path in img_paths if img_path.suffix.lower() in extensions]
             elif qtype == 2:
                 images = list()
                 for img_path in img_paths:
@@ -190,7 +190,7 @@ class Images:
                 logger.error(f"Unsupported image type '{qtype}'.")
         else:
             if qtype == 1:
-                images = [Image(img_path) for img_path in img_paths]
+                images = [Image(img_path, dataset=img_path.parent.name) for img_path in img_paths]
             elif qtype == 2:
                 images = list()
                 for img_path in img_paths:

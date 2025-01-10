@@ -358,9 +358,9 @@ def visual(qtype, directory, vtype):
                 qtype=qtype,
                 title="Diagnostic Score per Datasets",
                 xlabel="Datasets",
-                xtick_labels=['Test'],
                 ylabel="Diagnostic score",
-                output_dir=directory
+                output_dir=directory,
+                # xtick_labels=['Test']
             )
         elif vtype == 'histogram':
             logger.info(f"Plotting histograms for diagnostic score.")
