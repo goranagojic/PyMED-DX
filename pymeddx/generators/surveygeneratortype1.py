@@ -173,9 +173,6 @@ class SurveyGenerator:
                     fout.write(html)
                     logger.info(f"Survey {survey_filename} saved!")
 
-            # copy images that should appear in surveys to images directory
-            SurveyGenerator._copy_export_images(where, survey)
-
     @staticmethod
     def _copy_export_images(where, survey):
         # exported surveys work when images are in the same directory as surveys
