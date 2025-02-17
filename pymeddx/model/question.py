@@ -75,9 +75,7 @@ class QuestionType1(Question):
         if self.image is not None:
             question_json = QuestionType1._get_question_template().substitute({
                 "quid": self.id,
-                "imid": self.image.id,
-                "imname": self.image.name,
-                "imfname": self.image.filename,
+                "imhash": "base64://" + self.image.encode_to_base64(),  # prefix base64:// is requred for cornerstone loading
                 "questions": QuestionType1._get_questions()
             })
             self.json = minify_json(question_json)
@@ -121,8 +119,7 @@ class QuestionType1(Question):
             {{
                 type: "html",
                 name: "s^_^-q$quid-img",
-                html: "<div class='img-zoom-container'><div style='width: 500px; float: left'><img onload=\\"imageZoom('$imname', '$imname-zoom')\\" id='$imname' src='images/$imfname' style='width: 100%'/></div>
-                       <div id='$imname-zoom' class='img-zoom-result'></div></div>"
+                html: "<div id='viewer' style='width: 756px; height: 756px;'></div><img id='base64' src='$imhash' style='display: none;'>"
             }},
             {{
                 type: "radiogroup",
