@@ -9,7 +9,7 @@ from model.survey import *
 from model.question import *
 from utils.database import session
 from utils.logger import logger
-from utils.tools import fisher_yates_shuffle
+from utils.tools import fisher_yates_shuffle, load_js
 
 from localization.locale import type1_locale_data
 
@@ -139,6 +139,9 @@ class SurveyGenerator:
             raise ValueError(f"Cannot export survey to '{export_type}'. Supported types are "
                              f"{SurveyGenerator.supported_export_types}")
 
+        # load image viewer js content
+        image_viewer_js = load_js()
+
         # export content
         surveys = session.query(Survey).where(Survey.type == survey_type).all()
         for survey in surveys:
@@ -163,6 +166,7 @@ class SurveyGenerator:
                 """).substitute({
                     "head": SurveyGenerator._generate_html_head_template(),
                     "body": SurveyGenerator._genenerate_html_body_template().substitute({
+                        "image_viewer_js": image_viewer_js,
                         "survey_json": survey.json,
                         "jqueryselector": "$"
                     })
@@ -225,12 +229,13 @@ class SurveyGenerator:
 
     @staticmethod
     def _genenerate_html_body_template():
+        # $image_viewer_js - a source code of a js library for medical image visualization
         # $survey_json - survey json string saved in a database
         # $jqueryselector - is to be substitutes with "$" as a workaround
         return Template(f"""
 <body>
     <!-- replace this with built-in js code -->
-    <script src="simpleviewer.js"></script>
+    <script>$image_viewer_js</script>
     
     <!-- a container where the survey will be inserted -->
     <div id="surveyContainer"></div>
