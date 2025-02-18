@@ -3,7 +3,6 @@ import re
 import os
 
 from random import randint
-from utils.medical_viewer import MEDICAL_VIEWER_MINIFIED_JS, MEDICAL_VIEWER_JS
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
