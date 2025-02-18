@@ -10,6 +10,7 @@ from pathlib import Path
 
 from utils.database import Base, session
 from model.diagnosis import Diagnosis, Diagnoses, association_table, ForeignKey
+from utils.tools import load_dicom
 from utils.logger import logger
 
 
@@ -36,6 +37,10 @@ class Image(Base):
     # TODO if needed add the other direction of the relationship Image - QuestionType2
     # at the moment, there is implementation for relationship QuestionType2 -> Image
     # direction Image -> QuestionType2 is computationally and not needed at the moment
+
+    @property
+    def fullpath(self):
+        return Path(self.root) / self.filename
 
     @hybrid_property
     def name(self):
@@ -74,6 +79,9 @@ class Image(Base):
             image_data = image_file.read()
         encoded_string = base64.b64encode(image_data).decode("utf-8")
         return encoded_string
+
+    def exists(self):
+        return (Path(self.root) / self.filename).exists()
 
 
 class Images:
@@ -178,42 +186,44 @@ class Images:
         logger.info(f"Image extensions to be loaded {extensions}.")
         logger.info(f"Loading images from {directory}...")
 
-        img_paths = Path(directory).glob("*")
+        # extract png from dicom images
+        dicom_paths = Path(directory).glob("*")
+        if ".dicom" in extensions or ".dcm" in extensions:
+            for path in dicom_paths:
+                if path.suffix in ['.dcm', '.dicom']:
+                    _ = load_dicom(path)
+
+        # load regular images
         images = list()
-        if extensions is not None or len(extensions) != 0:
-            if qtype == 1:
-                images = [Image(img_path, dataset=img_path.parent.name) for img_path in img_paths if img_path.suffix.lower() in extensions]
-            elif qtype == 2:
-                images = list()
-                for img_path in img_paths:
-                    if img_path.suffix.lower() in extensions:
-                        img_parts = img_path.stem.split('-')
-                        if len(img_parts) != 1:
-                            dataset = img_parts[2]
-                            model = img_parts[1]
-                        else:
-                            dataset = "reference"
-                            model = ""
-                        img = Image(
-                            filepath=img_path,
-                            dataset=dataset,
-                            model=model
-                        )
+        img_paths = Path(directory).glob("*")
+
+        # image loading for questionnaire type 1
+        if qtype == 1:
+            images = list()
+            for img_path in img_paths:
+                # check if file extension is supported
+                if img_path.suffix.lower() in extensions:
+                    # if the file is in dicom format, change the pathname to the extracted png image
+                    if img_path.suffix.lower() in ['.dcm', '.dicom']:
+                        img_path = img_path.with_suffix('.png')
+                    img = Image(img_path, dataset=img_path.parent.name)
+
+                    if img.exists():
                         images.append(img)
-            else:
-                logger.error(f"Unsupported image type '{qtype}'.")
-        else:
-            if qtype == 1:
-                images = [Image(img_path, dataset=img_path.parent.name) for img_path in img_paths]
-            elif qtype == 2:
-                images = list()
-                for img_path in img_paths:
+                    else:
+                        logger.warning(f"[WARNING] The image on path '{img.fullpath}' does not exist, so it cannot "
+                                       f"be stored in a database.")
+        # image loading for questionnaire type 2
+        elif qtype == 2:
+            images = list()
+            for img_path in img_paths:
+                if img_path.suffix.lower() in extensions:
                     img_parts = img_path.stem.split('-')
                     if len(img_parts) != 1:
-                        dataset = img_parts[1]
-                        model = img_parts[2]
+                        dataset = img_parts[2]
+                        model = img_parts[1]
                     else:
-                        dataset = "referent"
+                        dataset = "reference"
                         model = ""
                     img = Image(
                         filepath=img_path,
@@ -221,8 +231,8 @@ class Images:
                         model=model
                     )
                     images.append(img)
-            else:
-                logger.error(f"Unsupported image type '{qtype}'.")
+        else:
+            logger.error(f"Unsupported question type '{qtype}'.")
 
         logger.info(f"Loaded {len(images)} images.")
 
