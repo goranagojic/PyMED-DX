@@ -219,8 +219,8 @@ class SurveyGenerator:
       let SurveyData = {
          //PHP-SURVEY-DATA-REPLACE
       };
-      function initViewer(imageId) {
-          const viewer = new MedicalImageViewer('#viewer');
+      function initViewer(imageId, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText) {
+          const viewer = new MedicalImageViewer('#viewer', resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
           viewer.loadImage(imageId)
       };
      </script>
@@ -296,7 +296,12 @@ class SurveyGenerator:
             if (options.question.name.includes('-img')) {{
                 let imgElement = options.htmlElement.querySelector('#base64');
                 let imageId = imgElement.src;
-                initViewer(imageId);
+                let resetWLButtonText = "{type1_locale_data["iview_reset_wl_button_text"]}";
+                let resetZoomButtonText = "{type1_locale_data["iview_reset_zoom_button_text"]}";
+                let resetPanButtonText = "{type1_locale_data["iview_reset_pan_button_text"]}";
+                let resetRotationButtonText = "{type1_locale_data["iview_reset_rotation_button_text"]}";
+                let resetAllButtonText = "{type1_locale_data["iview_reset_all_button_text"]}";
+                initViewer(imageId, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
             }} 
         }});
     </script>

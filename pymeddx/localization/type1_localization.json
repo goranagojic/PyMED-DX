@@ -10,5 +10,10 @@
     "max_certain": "Certain",
     "error_text": "Please answer the question.",
     "thank_you_message": "Thank you for completing the questionnaire!",
+    "iview_reset_wl_button_text": "Reset W/L",
+    "iview_reset_zoom_button_text": "Reset Zoom",
+    "iview_reset_pan_button_text": "Reset Pan",
+    "iview_reset_rotation_button_text": "Reset Rotation",
+    "iview_reset_all_button_text": "Reset All",
     "localization": "en"
 }
