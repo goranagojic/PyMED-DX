@@ -225,12 +225,18 @@ class Images:
                     else:
                         dataset = "reference"
                         model = ""
+                    if img_path.suffix.lower() in ['.dcm', '.dicom']:
+                        img_path.with_suffix('.png')
                     img = Image(
                         filepath=img_path,
                         dataset=dataset,
                         model=model
                     )
-                    images.append(img)
+                    if img.exists():
+                        images.append(img)
+                    else:
+                        logger.warning(f"[WARNING] The image on path '{img.fullpath}' does not exist, so it cannot "
+                                       f"be stored in a database.")
         else:
             logger.error(f"Unsupported question type '{qtype}'.")
 
