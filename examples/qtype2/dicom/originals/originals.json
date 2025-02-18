@@ -1,0 +1,15 @@
+[
+    {
+        "image_name": "000000",
+        "diagnoses": [{"token": "background_diabetic_retinopathy","name": "background diabetic retinopathy"}],
+        "comment": "",
+        "type": "original"  
+    }
+    ,
+    {
+        "image_name": "000001",
+        "diagnoses": [],
+        "comment": "",
+        "type": "original"  
+    }
+]
