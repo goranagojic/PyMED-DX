@@ -160,6 +160,23 @@ class SurveyGenerator:
       let SurveyData = {
          //PHP-SURVEY-DATA-REPLACE
       };
+      function initViewer(querySelector, imageId) {
+          const viewer = new MedicalImageViewer('#' + querySelector);
+          viewer.loadImage(imageId)
+      };
+      function cornerstoneTransformBase64(base64String) {
+        // A typical data URI prefix looks like "data:image/png;base64," 
+        // (or "data:image/jpeg;base64," etc.)
+        const prefixRegex = /^data:image\/[a-zA-Z0-9+.-]+;base64,/;
+
+        // Remove the standard data URI prefix if it exists
+        const stripped = base64String.replace(prefixRegex, "");
+
+        // Prepend "base://" string required for cornerstone base64 image loader
+        const cornerstoneTansformedBase64 = "base64://" + stripped;
+
+        return cornerstoneTansformedBase64;
+      }
      </script>
   </head>
 """
@@ -170,6 +187,7 @@ class SurveyGenerator:
         # $jqueryselector - is to be substitutes with "$" as a workaround
         return Template(f"""
   <body>
+    <script src="simpleviewer.js"></script>
     <div id="surveyContainer"></div>
     
     <!-- Init survey -->
@@ -224,22 +242,6 @@ class SurveyGenerator:
           downloadSurveyData(formattedData, responseFilename);
       }}
       var survey = new Survey.Model(surveyJSON);
-      
-      survey
-        .onAfterRenderPanel
-        .add(function (sender, options) {{
-            console.debug("Opaljen onAfterRenderPanel dogadjaj");
-           // options.htmlElement - an HTML element bound to the panel object
-           // options.panel       - a panel object for which the event is fired 
-        }});
-        
-      survey
-        .onAfterRenderPage
-        .add(function (sender, options) {{
-            console.debug("Opaljen onAfterRenderPage dogadjaj");
-            // options.page - a page object for which the event is fired, typically the current/active page
-            // options.htmlElement - an HTML element bound to the page object
-        }});
         
       survey
         .onAfterRenderQuestion
@@ -258,13 +260,12 @@ class SurveyGenerator:
             
             let container = document.getElementsByClassName("sv-row")
             if (container.length !== 1) {{
-                console.debug("Iz nekog razloga postoji vise od jednog elementa sa sv-row klasom... Izlazim.");
                 return;
             }}
             container = container[0];
             let images = document.getElementsByTagName("img");
-            let minimal_width = 300;  // Т7Т: минимална дозвољена ширина слике у пикселима.
-            for (image in images) {{   // Т7Т: иницијализација величина слика да би се величине слика добро рачунале за случај када могу да стану максимално 2 једна до друге.
+            let minimal_width = 300;
+            for (image in images) {{
               if (images[image].style) {{
                 let old_width = images[image].width;
                 images[image].style.width = minimal_width;
@@ -275,25 +276,25 @@ class SurveyGenerator:
             }}
             
             let container_original = container.children[0];
-            let container_original_picture = container_original.children[0].children[1].children[0];  // Т7Т: најужи део у којем се ицртава оригинал слика, преузима се да не би морали да се рачунају заузећа од стране маргина, тапацирања и ивица.
+            let container_original_picture = container_original.children[0].children[1].children[0];
             let container_segment = container.children[1];
-            let container_segment_pictures = container_segment.children[0].children[1].children[0];  // Т7Т: најужи део у којем се ицртавају сегментационе слике, преузима се да не би морали да се рачунају заузећа од стране маргина, тапацирања и ивица.
+            let container_segment_pictures = container_segment.children[0].children[1].children[0];
 
             let new_width = -1;
-            if (Math.floor(container.offsetWidth) < 675) {{  // Т7Т: ако укупна ширина доступна за приказ питања није барем 675, рачунамо да не могу стати ни 2 слике како треба једна до друге, па стављамо величину те једне видљиве слике на максималну доступну, а минимално 500. -->
+            if (Math.floor(container.offsetWidth) < 675) {{
               new_width = Math.floor(container_original_picture.offsetWidth-8); 
               if (new_width < 500)
                 new_width = 500;
-            }} else if (Math.floor(container.offsetWidth) < 1000) {{  // Т7Т: ако укупна ширина доступна за приказ питања није барем 950, рачунамо да не могу стати све 3 слике ако су ширине слика веће од 300 пиксела па их стављамо на максималну доступну ширину за 2 слике.
-              new_width = Math.floor(container_segment_pictures.offsetWidth- 32);  // Т7Т: рачунање доступног простора чисто за 1 слику у сегментационом делу
-              new_width = new_width + Math.floor(container_original_picture.offsetWidth-8); // Т7Т: додавање на ширину за 1 сегментациону слику и доступну ширину за оригинал
-              new_width = Math.floor(new_width/2); // Т7Т: рачунање ширине за појединачну слику (у овој верзији све слике су исте ширине (ако су истог односа онда су и исте висине))
+            }} else if (Math.floor(container.offsetWidth) < 1000) {{
+              new_width = Math.floor(container_segment_pictures.offsetWidth- 32);
+              new_width = new_width + Math.floor(container_original_picture.offsetWidth-8);
+              new_width = Math.floor(new_width/2);
             }} else {{
-              new_width = Math.floor(container_segment_pictures.offsetWidth-Math.ceil(container_segment.offsetWidth*0.05) - 32); // Т7Т: рачунање доступног простора чисто за 2 слике у сегментационом делу
-              new_width = new_width + Math.floor(container_original_picture.offsetWidth-8); // Т7Т: додавање на ширину за 2 сегментационе слике и доступну ширину за оригинал
-              new_width = Math.floor(new_width/3); // Т7Т: рачунање ширине за појединачну слику (у овој верзији све слике су исте ширине (ако су истог односа онда су и исте висине))
+              new_width = Math.floor(container_segment_pictures.offsetWidth-Math.ceil(container_segment.offsetWidth*0.05) - 32);
+              new_width = new_width + Math.floor(container_original_picture.offsetWidth-8);
+              new_width = Math.floor(new_width/3); 
             }}
-            if (new_width < minimal_width) // Т7Т: провера смислености; апсолутни дозвољени минимум за ширину слике у анкети; ако је срачуната величина за слику мања од минималне ширине у пикселима поставља се на минималну ширину у пискелима. -->
+            if (new_width < minimal_width) 
               new_width = minimal_width;
             for (image in images) {{
                 if (images[image].style) {{
@@ -305,9 +306,35 @@ class SurveyGenerator:
                 }}
             }}
             
-            // dodavanje vertikalnih razmaka iznad i ispod opisa
+            // add vspace above and bellow the question description
             description = document.getElementsByClassName("sv-description")[0].children[0]
             description.style = "position: absolute; margin-top: 5px; margin-bottom: 10px;"
+            
+            // replace images inisde the image picker with medical image viewer
+            images = options.htmlElement.querySelectorAll("img");
+            images.forEach((img) => {{
+
+              let imgAlt = img.alt;
+
+              // Find the matching choice from the question definition
+              const choice = options.question.choices.find(c => c.value === imgAlt);
+              if (!choice) console.error("There are no choices for this image for some reason... Exiting.");
+
+              // Retrieve the Base64 code from the choice object
+              const base64Data = cornerstoneTransformBase64(choice.imageLink);
+
+              // Replace the default image with a custom viewer
+              let container = document.createElement("div");
+              container.id = "viewer-" + imgAlt; 
+              container.style.width = 512;
+              container.style.height = 512;
+              container.className = "sv-imagepicker__image";
+              container.style.pointerEvents = "auto";
+              img.parentElement.replaceChild(container, img);
+
+              // Initialize image viewer
+              initViewer(container.id, base64Data);
+            }});
             
         }});
         
