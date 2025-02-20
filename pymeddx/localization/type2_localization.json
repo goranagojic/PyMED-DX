@@ -1,6 +1,11 @@
 {
-    "original_title": "Original picture",
-    "answer_choice_title": "Segmentation maps",
+    "original_title": "Reference image",
+    "answer_choice_title": "Image choice",
     "error_text": "Please choose one of the two segmentation maps.",
+    "iview_reset_wl_button_text": "Reset W/L",
+    "iview_reset_zoom_button_text": "Reset Zoom",
+    "iview_reset_pan_button_text": "Reset Pan",
+    "iview_reset_rotation_button_text": "Reset Rotation",
+    "iview_reset_all_button_text": "Reset All",
     "localization": "en"
 }

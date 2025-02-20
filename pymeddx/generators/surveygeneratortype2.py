@@ -160,8 +160,8 @@ class SurveyGenerator:
       let SurveyData = {
          //PHP-SURVEY-DATA-REPLACE
       };
-      function initViewer(querySelector, imageId) {
-          const viewer = new MedicalImageViewer('#' + querySelector);
+      function initViewer(querySelector, imageId, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText) {
+          const viewer = new MedicalImageViewer('#' + querySelector, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
           viewer.loadImage(imageId)
       };
       function cornerstoneTransformBase64(base64String) {
@@ -333,7 +333,12 @@ class SurveyGenerator:
               img.parentElement.replaceChild(container, img);
 
               // Initialize image viewer
-              initViewer(container.id, base64Data);
+              let resetWLButtonText = "{type2_locale_data["iview_reset_wl_button_text"]}";
+              let resetZoomButtonText = "{type2_locale_data["iview_reset_zoom_button_text"]}";
+              let resetPanButtonText = "{type2_locale_data["iview_reset_pan_button_text"]}";
+              let resetRotationButtonText = "{type2_locale_data["iview_reset_rotation_button_text"]}";
+              let resetAllButtonText = "{type2_locale_data["iview_reset_all_button_text"]}";
+              initViewer(container.id, base64Data, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
             }});
             
         }});
