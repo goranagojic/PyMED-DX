@@ -42146,22 +42146,14 @@
     cornerstoneTools.external.cornerstoneMath = cornerstoneMath;
     cornerstoneTools.external.Hammer = Hammer;
     cornerstoneTools.external.cornerstone = cornerstone;
-    // cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
-    // cornerstoneWebImageLoader.external.cornerstone = cornerstone;
-    // cornerstoneWebImageLoader.configure({
-    // For images loaded from external servers, use this:
-    //   crossOrigin: 'anonymous'
-    // });
     cornerstoneBase64ImageLoader.external.cornerstone = cornerstone;
-    // cornerstoneFileImageLoader.external.cornerstone = cornerstone;
     cornerstoneTools.init();
     class MedicalImageViewer {
-        constructor(containerSelector, resetWLButtonText = 'Reset W/L', resetZoomButtonText = 'Reset Zoom', resetPanButtonText = 'Reset Pan', resetRotationButtonText = 'Reset Rotation', resetAllButtonText = 'Reset All') {
+        constructor({ containerSelector = '#viewer', resetWLButtonText = 'Reset W/L', resetZoomButtonText = 'Reset Zoom', resetPanButtonText = 'Reset Pan', resetRotationButtonText = 'Reset Rotation', resetAllButtonText = 'Reset All', helpButtonText = 'Help', closeHelpButtonText = 'Close', helpDialogTitle = "Medical Image Viewer Controls", helpDialogWLMessage = "</b>Window/Level (Brightness/Contrast) Tool</b>: Hold the right mouse button and drag.", helpDialogPanMessage = "<b>Pan Image Tool</b>: Hold the left mouse button and drag.", helpDialogZoomMessage = "<b>Zoom In/Out Tool</b>: Scroll the mouse wheel.", helpDialogRotateMessage = "<b>Rotate Tool<b>: Hold middle mouse click and drag.", helpDialogRestoreMessage = "<b>Restore Image Transformations</b>: Click on the appropriate button below the image viewer." } = {}) {
             this.viewportOriginal = null;
             this.originalWindowWidth = null;
             this.originalWindowCenter = null;
             this.originalScale = null;
-            // Translation is actually an object { x: number; y: number }
             this.originalTranslation = null;
             this.originalRotation = null;
             const container = document.querySelector(containerSelector);
@@ -42211,6 +42203,49 @@
             this.resetAllButton.style.padding = '8px 12px';
             this.resetAllButton.style.cursor = 'pointer';
             this.resetAllButton.addEventListener('click', () => this.resetAllEffect());
+            // Create help button and help panel
+            this.helpButton = document.createElement('button');
+            this.helpButton.innerText = 'Help';
+            this.helpButton.style.marginTop = '10px';
+            this.helpButton.style.padding = '8px 12px';
+            this.helpButton.style.cursor = 'pointer';
+            this.helpButton.addEventListener('click', () => { helpDialog.style.display = 'block'; });
+            // Create Help Dialog (Hidden Initially)
+            const helpDialog = document.createElement('div');
+            helpDialog.style.position = 'fixed';
+            helpDialog.style.top = '50%';
+            helpDialog.style.left = '50%';
+            helpDialog.style.transform = 'translate(-50%, -50%)';
+            helpDialog.style.width = '350px';
+            helpDialog.style.backgroundColor = 'white';
+            helpDialog.style.padding = '20px';
+            helpDialog.style.boxShadow = '0px 4px 6px rgba(0,0,0,0.3)';
+            helpDialog.style.borderRadius = '10px';
+            helpDialog.style.zIndex = '1000';
+            helpDialog.style.display = 'none'; // Hidden by default
+            helpDialog.innerHTML = `
+      <h3 style="margin-top: 0;">${helpDialogTitle}</h3>
+      <ul style="padding-left: 20px;">
+        <li>${helpDialogWLMessage}</li>
+        <li>${helpDialogPanMessage}</li>
+        <li>${helpDialogZoomMessage}</li>
+        <li>${helpDialogRotateMessage}</li>
+        <li>${helpDialogRestoreMessage}</li>
+      </ul>
+    `;
+            // Create Close Button
+            const closeButton = document.createElement('button');
+            closeButton.innerText = closeHelpButtonText;
+            closeButton.style.marginTop = '10px';
+            closeButton.style.padding = '8px 12px';
+            closeButton.style.cursor = 'pointer';
+            closeButton.style.display = 'block';
+            closeButton.style.width = '100%';
+            closeButton.style.backgroundColor = '#007bff';
+            closeButton.style.color = 'white';
+            closeButton.style.border = 'none';
+            closeButton.style.borderRadius = '5px';
+            closeButton.addEventListener('click', () => { helpDialog.style.display = 'none'; });
             // Append elements
             container.appendChild(this.element);
             container.appendChild(this.resetWLButton);
@@ -42218,6 +42253,9 @@
             container.appendChild(this.resetPanButton);
             container.appendChild(this.resetRotationButton);
             container.appendChild(this.resetAllButton);
+            container.appendChild(this.helpButton);
+            helpDialog.appendChild(closeButton);
+            document.body.appendChild(helpDialog);
             // Initialize viewer subcomponent (add tools)
             this.initializeViewer();
         }
@@ -42265,39 +42303,6 @@
                 }
             });
         }
-        //   async loadImage(imageUrl: string) {
-        //     try {
-        //       let imagePath;
-        //       if (imageUrl.includes('base64')) {
-        //         console.log("Image is in base64 format.")
-        //         const iId = cornerstoneFileImageLoader.fileManager.addBuffer(imageUrl.split(',')[1]);
-        //         imagePath = iId;
-        //       } else {
-        //         console.log("Image is in weburi or dicomuri format.")
-        //         imagePath = imageUrl;
-        //       }
-        //       const image = await cornerstone.loadImage(imagePath);
-        //       cornerstone.displayImage(this.element, image);
-        //
-        //       // Store the entire original viewport
-        //       this.viewportOriginal = cornerstone.getViewport(this.element);
-        //
-        //       // Original W/L from the image itself
-        //       this.originalWindowWidth = image.windowWidth;
-        //       this.originalWindowCenter = image.windowCenter;
-        //
-        //       // Original scale, translation, and rotation from the viewport
-        //       this.originalScale = this.viewportOriginal.scale;
-        //       this.originalRotation = this.viewportOriginal.rotation;
-        //       if (this.viewportOriginal.translation != null) {
-        //           this.originalTranslation = { x: this.viewportOriginal.translation.x, y: this.viewportOriginal.translation.y };
-        //       } else {
-        //         console.error("Could not initialize translation.x and translation.y positions, because viewportOriginal.translation is null.")
-        //       }
-        //     } catch (error) {
-        //       console.error('Error loading image:', error);
-        //     }
-        //   }
         resetWLEffect() {
             const viewport = cornerstone.getViewport(this.element);
             if (viewport) {
