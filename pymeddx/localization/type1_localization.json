@@ -1,6 +1,6 @@
 {
     "title": "Question",
-    "description": "",
+    "description": "On this page, you will see three images: a referent image in the first position and two related images positioned to the right of it. Your task is to choose the image that best represents the referent image.",
     "question_explanation": "Please choose the option you agree with the most about the displayed fundus image.",
     "positive_answer": "This image displays the signs of background",
     "negative_answer": "I believe that this image does not show any of the listed conditions.",
