@@ -8,7 +8,7 @@ from model.survey import *
 from model.question import *
 from utils.database import session
 from utils.logger import logger
-from utils.tools import fisher_yates_shuffle
+from utils.tools import fisher_yates_shuffle, load_js
 
 from localization.locale import type2_locale_data
 
@@ -101,6 +101,8 @@ class SurveyGenerator:
             logger.warning(f"There are no surveys in a database to be exported. Skipping.")
             exit(1)
 
+        image_viewer_js = load_js()
+
         for survey in surveys:
             if type(survey) == RegularSurvey:
                 prefix = "regular"
@@ -123,6 +125,7 @@ class SurveyGenerator:
                 """).substitute({
                     "head": SurveyGenerator._generate_html_head_template(),
                     "body": SurveyGenerator._genenerate_html_body_template().substitute({
+                        "image_viewer_js": image_viewer_js,
                         "survey_json": survey.json,
                         "jqueryselector": "$"
                     })
@@ -187,7 +190,9 @@ class SurveyGenerator:
         # $jqueryselector - is to be substitutes with "$" as a workaround
         return Template(f"""
   <body>
-    <script src="simpleviewer.js"></script>
+    <!-- replace this with built-in js code -->
+    <script>$image_viewer_js</script>
+    
     <div id="surveyContainer"></div>
     
     <!-- Init survey -->
