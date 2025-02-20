@@ -163,10 +163,42 @@ class SurveyGenerator:
       let SurveyData = {
          //PHP-SURVEY-DATA-REPLACE
       };
-      function initViewer(querySelector, imageId, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText) {
-          const viewer = new MedicalImageViewer('#' + querySelector, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
+      function initViewer(
+        querySelector, 
+        imageId, 
+        resetWLButtonText, 
+        resetZoomButtonText, 
+        resetPanButtonText, 
+        resetRotationButtonText, 
+        resetAllButtonText, 
+        helpButtonText, 
+        closeHelpButtonText,
+        helpDialogTitle,
+        helpDialogWLMessage,
+        helpDialogPanMessage,
+        helpDialogZoomMessage,
+        helpDialogRotateMessage,
+        helpDialogRestoreMessage
+      ) {
+          const viewer = new MedicalImageViewer({
+            containerSelector: '#' + querySelector, 
+            resetWLButtonText: resetWLButtonText, 
+            resetZoomButtonText: resetZoomButtonText,
+            resetPanButtonText: resetPanButtonText, 
+            resetRotationButtonText: resetRotationButtonText, 
+            resetAllButtonText: resetAllButtonText, 
+            helpButtonText: helpButtonText, 
+            closeHelpButtonText: closeHelpButtonText,
+            helpDialogTitle: helpDialogTitle,
+            helpDialogWLMessage: helpDialogWLMessage,
+            helpDialogPanMessage: helpDialogPanMessage,
+            helpDialogZoomMessage: helpDialogZoomMessage,
+            helpDialogRotateMessage: helpDialogRotateMessage,
+            helpDialogRestoreMessage: helpDialogRestoreMessage
+          });
           viewer.loadImage(imageId)
       };
+      
       function cornerstoneTransformBase64(base64String) {
         // A typical data URI prefix looks like "data:image/png;base64," 
         // (or "data:image/jpeg;base64," etc.)
@@ -313,7 +345,7 @@ class SurveyGenerator:
             
             // add vspace above and bellow the question description
             description = document.getElementsByClassName("sv-description")[0].children[0]
-            description.style = "position: absolute; margin-top: 5px; margin-bottom: 10px;"
+            description.style = "position: absolute; margin-top: 10px; margin-bottom: 10px;"
             
             // replace images inisde the image picker with medical image viewer
             images = options.htmlElement.querySelectorAll("img");
@@ -331,8 +363,8 @@ class SurveyGenerator:
               // Replace the default image with a custom viewer
               let container = document.createElement("div");
               container.id = "viewer-" + imgAlt; 
-              container.style.width = 512;
-              container.style.height = 512;
+              container.style.width = 564;
+              container.style.height = 564;
               container.className = "sv-imagepicker__image";
               container.style.pointerEvents = "auto";
               img.parentElement.replaceChild(container, img);
@@ -343,9 +375,33 @@ class SurveyGenerator:
               let resetPanButtonText = "{type2_locale_data["iview_reset_pan_button_text"]}";
               let resetRotationButtonText = "{type2_locale_data["iview_reset_rotation_button_text"]}";
               let resetAllButtonText = "{type2_locale_data["iview_reset_all_button_text"]}";
-              initViewer(container.id, base64Data, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
+              let helpButtonText = "{type2_locale_data["iview_help_button_text"]}";
+              let helpDialogTitle = "{type2_locale_data["iview_help_dialog_title"]}";
+              let helpDialogWLMessage = "{type2_locale_data["iview_help_dialog_wl_message"]}";
+              let helpDialogPanMessage = "{type2_locale_data["iview_help_dialog_pan_message"]}";
+              let helpDialogZoomMessage = "{type2_locale_data["iview_help_dialog_zoom_message"]}";
+              let helpDialogRotateMessage = "{type2_locale_data["iview_help_dialog_rotate_message"]}";
+              let helpDialogRestoreMessage = "{type2_locale_data["iview_help_dialog_restore_message"]}";
+              let closeHelpButtonText = "{type2_locale_data["iview_close_help_button_text"]}";
+              
+              initViewer(
+                    container.id,
+                    base64Data, 
+                    resetWLButtonText, 
+                    resetZoomButtonText, 
+                    resetPanButtonText, 
+                    resetRotationButtonText, 
+                    resetAllButtonText,
+                    helpButtonText,
+                    closeHelpButtonText,
+                    helpDialogTitle,
+                    helpDialogWLMessage,
+                    helpDialogPanMessage,
+                    helpDialogZoomMessage,
+                    helpDialogRotateMessage,
+                    helpDialogRestoreMessage
+                );
             }});
-            
         }});
         
       survey.locale = "{type2_locale_data["localization"]}"
