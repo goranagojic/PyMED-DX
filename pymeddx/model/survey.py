@@ -189,14 +189,24 @@ class Survey(Base):
     def _get_page_template(self):
         # $pid - survey page id
         # $questions - questions json
-        return Template(f"""
-        {{
-            name: "page-$pid",
-            $questions,
-            title: "{type1_locale_data["title"]} $pid",
-            description: "{type1_locale_data["description"]}"
-        }}
-        """)
+        description = type1_locale_data.get("description")
+        if description is None:
+            return Template(f"""
+            {{
+                name: "page-$pid",
+                $questions,
+                title: "{type1_locale_data["title"]} $pid"
+            }}
+            """)
+        else:
+            return Template(f"""
+            {{
+                name: "page-$pid",
+                $questions,
+                title: "{type1_locale_data["title"]} $pid",
+                description: "{description}"
+            }}
+            """)
 
 
 class RegularSurvey(Survey):
