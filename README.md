@@ -13,6 +13,7 @@ data. Two questionnaire types are supported:
   - _QType 1:_ The primary questionnaire type focuses on assessing the diagnostic value of 2D medical images.
   - _QType 2:_ Additional type supports subjective evaluation of machine learning models used in clinical settings 
   to produce 2D image outputs.
+  You can see questionnaire examples in [Questionnaire example](docs/questionnaires.md) section
 - **Image and Response Analysis**: Collect, aggregate, and analyze responses, supporting diagnostic studies and repeatability evaluation.
 - **Automated Metrics Calculation**: Calculate metrics and statistical analyses of observer agreement on response data.
 - **Randomization**: Shuffle questions in a questionnaire to mitigate the memory effect in surveys.
@@ -33,7 +34,8 @@ questionnaires, enabling use in various languages and geographical regions.
   - [Metric calculation](#metric-calculation)
   - [Statistical analysis](#statistical-analysis)
   - [Visualizations](#visualizations)
-- [Examples](#examples)
+- [Tool Usage Examples](#examples)
+- [Questionnaire Examples](#examples-questionnaires)
 - [License](#license)
 
 [//]: # (- [Acknowledgments]&#40;#acknowledgments&#41;)
@@ -84,7 +86,22 @@ Example contents of the file with observer data:
 
 
 ### Loading image data
-Loads images with specific file extensions from a given directory into the database alongside their metadata if available. At the moment the tool has built-in support for 2D images only. 
+Loads images with specific file extensions from a given directory into the database alongside their metadata if available. At the moment the tool has built-in support for 2D images in **plain image format** (e.g. PNG, JPEG) **and single-frame DICOM format**. Supported [DICOM modalities](https://www.dicomlibrary.com/dicom/modality/) are:
+
+
+| DICOM image modality | Description                                                 |
+|----------------------|-------------------------------------------------------------|
+| `CR`                 | Computed Radiography                                        |
+| `DX`                 | Digital Radiography                                         |
+| `MG`                 | Mammography                                                 |
+| `IO`                 | Intra-Oral Radiography                                      |
+| `XA`                 | X-Ray Angiography                                           |
+| `RF`                 | Radio Fluoroscopy                                           |
+| `OP`                 | Ophthalmic Photography                                      |
+| `SM`                 | Slide Microscopy                                            |
+| `XC`                 | External-camera Photography                                 |
+| `SC`                 | Secondary Captured Image (used to provide ML model outputs) |
+**Table 1: Supported DICOM image modalities.**
 
 Only paths to the image files are loaded so that images are loaded during operations that require image data. Once loaded to the database, the images **should not be moved to another location**. If moved, the paths in the Image database table should be updated.
 
@@ -93,9 +110,9 @@ Only paths to the image files are loaded so that images are loaded during operat
 python main.py load images --qtype <questionnaire-type> --directory </path/to/image/directory> --extension <file-extension-with-dot> --metadata-file <file-name>
 ```
 Options:
-- `--qtype`, `-q` - Type of questionnaire that will be using the images. Currently supported values are 1 and 2.
+- `--qtype`, `-q` - Type of questionnaire that will be using the images. Currently, supported values are 1 and 2.
 - `--directory`, `-d` - Path to the directory containing the images. The immediate parent directory will be considered as a dataset name.
-- `--extension`, `-e` - A list of image extensions to be loaded from the directory. An extension is a string preceded by a dot sign (e.g. '.png').
+- `--extension`, `-e` - A list of image extensions to be loaded from the directory. An extension is a string preceded by a dot sign (e.g. '.png', '.jpg', '.dicom', '.dcm').
 - `--metadata-file`, `-m` - An image metadata filename. If not specified, the metadata file must be named after the innermost directory of the `directory` option. 
 
 **Metadata example - Questionnaire type 1**
@@ -311,10 +328,6 @@ or
 ```bash
 ./scripts/end-to-end-example2.sh
 ```
-
-> [!IMPORTANT]
-> **Note for QType 1 questionnaires.** 
-> If you want to download questionnaires from the Codespace to your local machine, make sure to also download the images directory and place it in the same location as the questionnaires locally. Otherwise, the images in the questionnaires will not be displayed.
 
 #### Running on your local Linux machine
 
