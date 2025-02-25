@@ -1,3 +1,4 @@
+import base64
 import json
 import sqlite3
 
@@ -60,6 +61,19 @@ class Image(Base):
             self.filename,
             str(len(self.questions))
         )
+
+    def encode_to_base64(self):
+        """
+        Encode an image file associated to Image object as a Base64 string.
+        The image file is the file located at the path self.root + self.filename.
+
+        :return: The base64-encoded string representation of the image.
+        """
+        image_path = Path(self.root) / self.filename;
+        with open(image_path, "rb") as image_file:
+            image_data = image_file.read()
+        encoded_string = base64.b64encode(image_data).decode("utf-8")
+        return encoded_string
 
 
 class Images:

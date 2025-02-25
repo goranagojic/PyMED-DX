@@ -9,7 +9,7 @@ from model.survey import *
 from model.question import *
 from utils.database import session
 from utils.logger import logger
-from utils.tools import fisher_yates_shuffle
+from utils.tools import fisher_yates_shuffle, load_js
 
 from localization.locale import type1_locale_data
 
@@ -139,6 +139,9 @@ class SurveyGenerator:
             raise ValueError(f"Cannot export survey to '{export_type}'. Supported types are "
                              f"{SurveyGenerator.supported_export_types}")
 
+        # load image viewer js content
+        image_viewer_js = load_js()
+
         # export content
         surveys = session.query(Survey).where(Survey.type == survey_type).all()
         for survey in surveys:
@@ -163,6 +166,7 @@ class SurveyGenerator:
                 """).substitute({
                     "head": SurveyGenerator._generate_html_head_template(),
                     "body": SurveyGenerator._genenerate_html_body_template().substitute({
+                        "image_viewer_js": image_viewer_js,
                         "survey_json": survey.json,
                         "jqueryselector": "$"
                     })
@@ -172,9 +176,6 @@ class SurveyGenerator:
                 with open(target_path, "w", encoding="utf8") as fout:
                     fout.write(html)
                     logger.info(f"Survey {survey_filename} saved!")
-
-            # copy images that should appear in surveys to images directory
-            SurveyGenerator._copy_export_images(where, survey)
 
     @staticmethod
     def _copy_export_images(where, survey):
@@ -204,35 +205,6 @@ class SurveyGenerator:
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
     
-    <!-- zoom styles -->
-    <!-- see: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_image_zoom -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
-      * {box-sizing: border-box;}
-
-      .img-zoom-container {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-      }
-
-      .img-zoom-lens {
-        position: absolute;
-        border: 1px solid #d4d4d4;
-        /*set the size of the lens:*/
-        width: 40px;
-        height: 40px;
-      }
-
-      .img-zoom-result {
-        border: 1px solid #d4d4d4;
-        /*set the size of the result div:*/
-        width: 400px;
-        height: 400px;
-        margin-left: 520px;
-      }
-    </style>
-    
     <!-- jquery and survey.jquery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link href="https://unpkg.com/survey-jquery@1.8.41/modern.css" type="text/css" rel="stylesheet" />
@@ -247,72 +219,27 @@ class SurveyGenerator:
       let SurveyData = {
          //PHP-SURVEY-DATA-REPLACE
       };
-      function imageZoom(imgID, resultID) {
-        var img, lens, result, cx, cy;
-        img = document.getElementById(imgID);
-        result = document.getElementById(resultID);
-        /*create lens:*/
-        lens = document.createElement("DIV");
-        lens.setAttribute("class", "img-zoom-lens");
-        /*insert lens:*/
-        img.parentElement.insertBefore(lens, img);
-        /*calculate the ratio between result DIV and lens:*/
-        cx = result.offsetWidth / lens.offsetWidth;
-        cy = result.offsetHeight / lens.offsetHeight;
-        /*set background properties for the result DIV:*/
-        result.style.backgroundImage = "url('" + img.src + "')";
-        result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
-        /*execute a function when someone moves the cursor over the image, or the lens:*/
-        lens.addEventListener("mousemove", moveLens);
-        img.addEventListener("mousemove", moveLens);
-        /*and also for touch screens:*/
-        lens.addEventListener("touchmove", moveLens);
-        img.addEventListener("touchmove", moveLens);
-        function moveLens(e) {
-          var pos, x, y;
-          /*prevent any other actions that may occur when moving over the image:*/
-          e.preventDefault();
-          /*get the cursor's x and y positions:*/
-          pos = getCursorPos(e);
-          /*calculate the position of the lens:*/
-          x = pos.x - (lens.offsetWidth / 2);
-          y = pos.y - (lens.offsetHeight / 2);
-          /*prevent the lens from being positioned outside the image:*/
-          if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
-          if (x < 0) {x = 0;}
-          if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
-          if (y < 0) {y = 0;}
-          /*set the position of the lens:*/
-          lens.style.left = x + "px";
-          lens.style.top = y + "px";
-          /*display what the lens "sees":*/
-          result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
-        }
-        function getCursorPos(e) {
-          var a, x = 0, y = 0;
-          e = e || window.event;
-          /*get the x and y positions of the image:*/
-          a = img.getBoundingClientRect();
-          /*calculate the cursor's x and y coordinates, relative to the image:*/
-          x = e.pageX - a.left;
-          y = e.pageY - a.top;
-          /*consider any page scrolling:*/
-          x = x - window.pageXOffset;
-          y = y - window.pageYOffset;
-          return {x : x, y : y};
-        }
-      }
+      function initViewer(imageId, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText) {
+          const viewer = new MedicalImageViewer('#viewer', resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
+          viewer.loadImage(imageId)
+      };
      </script>
   </head>
 """
 
     @staticmethod
     def _genenerate_html_body_template():
+        # $image_viewer_js - a source code of a js library for medical image visualization
         # $survey_json - survey json string saved in a database
         # $jqueryselector - is to be substitutes with "$" as a workaround
         return Template(f"""
 <body>
-    <div id="surveyContainer"></div>    
+    <!-- replace this with built-in js code -->
+    <script>$image_viewer_js</script>
+    
+    <!-- a container where the survey will be inserted -->
+    <div id="surveyContainer"></div>
+        
     <script>
         Survey.StylesManager.applyTheme("modern");
         var surveyJSON = $survey_json
@@ -363,6 +290,19 @@ class SurveyGenerator:
         $jqueryselector("#surveyContainer").Survey({{
             model: survey,
             onComplete: sendDataToDisk // Replace the server submission with local saving
+        }});
+        
+        survey.onAfterRenderQuestion.add(function (sender, options) {{
+            if (options.question.name.includes('-img')) {{
+                let imgElement = options.htmlElement.querySelector('#base64');
+                let imageId = imgElement.src;
+                let resetWLButtonText = "{type1_locale_data["iview_reset_wl_button_text"]}";
+                let resetZoomButtonText = "{type1_locale_data["iview_reset_zoom_button_text"]}";
+                let resetPanButtonText = "{type1_locale_data["iview_reset_pan_button_text"]}";
+                let resetRotationButtonText = "{type1_locale_data["iview_reset_rotation_button_text"]}";
+                let resetAllButtonText = "{type1_locale_data["iview_reset_all_button_text"]}";
+                initViewer(imageId, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
+            }} 
         }});
     </script>
 </body>
