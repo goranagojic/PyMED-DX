@@ -226,7 +226,7 @@ class Images:
                         dataset = "reference"
                         model = ""
                     if img_path.suffix.lower() in ['.dcm', '.dicom']:
-                        img_path.with_suffix('.png')
+                        img_path = img_path.with_suffix('.png')
                     img = Image(
                         filepath=img_path,
                         dataset=dataset,

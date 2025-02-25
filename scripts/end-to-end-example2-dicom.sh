@@ -21,10 +21,10 @@ fi
 command "Step 1: Load observers." "python ${TOOLHOME}/main.py load observers --filepath ${PROJECTHOME}/examples/observers.json"
 
 # Load reference images
-command "Step 2a: Load reference images." "python ${TOOLHOME}/main.py load images -d ${PROJECTHOME}/examples/qtype2/dicom/originals -e .png -q 2 -m originals.json"
+command "Step 2a: Load reference images." "python ${TOOLHOME}/main.py load images -d ${PROJECTHOME}/examples/qtype2/dicom/originals -e .dicom -q 2 -m originals.json"
 
 # Load reference images
-command "Step 2b: Load ML model images." "python ${TOOLHOME}/main.py load images -d ${PROJECTHOME}/examples/qtype2/dicom/ml-outputs -e .png -q 2 -m ml-outputs.json"
+command "Step 2b: Load ML model images." "python ${TOOLHOME}/main.py load images -d ${PROJECTHOME}/examples/qtype2/dicom/ml-outputs -e .dicom -q 2 -m ml-outputs.json"
 
 # Generate questions
 command "Step 3: Generate questions in the database." "python ${TOOLHOME}/main.py generate questions --qtype 2"
