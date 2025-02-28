@@ -1,6 +1,19 @@
 {
-    "original_title": "Original picture",
-    "answer_choice_title": "Segmentation maps",
+    "original_title": "Reference image",
+    "answer_choice_title": "Image choice",
     "error_text": "Please choose one of the two segmentation maps.",
+    "iview_reset_wl_button_text": "Reset W/L",
+    "iview_reset_zoom_button_text": "Reset Zoom",
+    "iview_reset_pan_button_text": "Reset Pan",
+    "iview_reset_rotation_button_text": "Reset Rotation",
+    "iview_reset_all_button_text": "Reset All",
+    "iview_help_button_text": "Help",
+    "iview_help_dialog_title": "Medical Image Viewer Help",
+    "iview_help_dialog_wl_message": "<b>Window/Level (Brightness/Contrast) Tool</b>: Hold the right mouse button and drag.",
+    "iview_help_dialog_pan_message": "<b>Pan Image Tool</b>: Hold the left mouse button and drag.",
+    "iview_help_dialog_zoom_message": "<b>Zoom In/Out Tool</b>: Scroll the mouse wheel.",
+    "iview_help_dialog_rotate_message": "<b>Rotate Tool</b>: Hold middle mouse click and drag.",
+    "iview_help_dialog_restore_message": "<b>Restore Image Transformations</b>: Click on the appropriate button below the image viewer.",
+    "iview_close_help_button_text": "Close",
     "localization": "en"
 }

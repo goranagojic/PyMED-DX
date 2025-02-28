@@ -219,8 +219,38 @@ class SurveyGenerator:
       let SurveyData = {
          //PHP-SURVEY-DATA-REPLACE
       };
-      function initViewer(imageId, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText) {
-          const viewer = new MedicalImageViewer('#viewer', resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
+      function initViewer(
+        imageId, 
+        resetWLButtonText, 
+        resetZoomButtonText, 
+        resetPanButtonText, 
+        resetRotationButtonText, 
+        resetAllButtonText, 
+        helpButtonText, 
+        closeHelpButtonText,
+        helpDialogTitle,
+        helpDialogWLMessage,
+        helpDialogPanMessage,
+        helpDialogZoomMessage,
+        helpDialogRotateMessage,
+        helpDialogRestoreMessage
+      ) {
+          const viewer = new MedicalImageViewer({
+            containerSelector: '#viewer', 
+            resetWLButtonText: resetWLButtonText, 
+            resetZoomButtonText: resetZoomButtonText,
+            resetPanButtonText: resetPanButtonText, 
+            resetRotationButtonText: resetRotationButtonText, 
+            resetAllButtonText: resetAllButtonText, 
+            helpButtonText: helpButtonText, 
+            closeHelpButtonText: closeHelpButtonText,
+            helpDialogTitle: helpDialogTitle,
+            helpDialogWLMessage: helpDialogWLMessage,
+            helpDialogPanMessage: helpDialogPanMessage,
+            helpDialogZoomMessage: helpDialogZoomMessage,
+            helpDialogRotateMessage: helpDialogRotateMessage,
+            helpDialogRestoreMessage: helpDialogRestoreMessage
+          });
           viewer.loadImage(imageId)
       };
      </script>
@@ -301,7 +331,31 @@ class SurveyGenerator:
                 let resetPanButtonText = "{type1_locale_data["iview_reset_pan_button_text"]}";
                 let resetRotationButtonText = "{type1_locale_data["iview_reset_rotation_button_text"]}";
                 let resetAllButtonText = "{type1_locale_data["iview_reset_all_button_text"]}";
-                initViewer(imageId, resetWLButtonText, resetZoomButtonText, resetPanButtonText, resetRotationButtonText, resetAllButtonText);
+                let helpButtonText = "{type1_locale_data["iview_help_button_text"]}";
+                let helpDialogTitle = "{type1_locale_data["iview_help_dialog_title"]}";
+                let helpDialogWLMessage = "{type1_locale_data["iview_help_dialog_wl_message"]}";
+                let helpDialogPanMessage = "{type1_locale_data["iview_help_dialog_pan_message"]}";
+                let helpDialogZoomMessage = "{type1_locale_data["iview_help_dialog_zoom_message"]}";
+                let helpDialogRotateMessage = "{type1_locale_data["iview_help_dialog_rotate_message"]}";
+                let helpDialogRestoreMessage = "{type1_locale_data["iview_help_dialog_restore_message"]}";
+                let closeHelpButtonText = "{type1_locale_data["iview_close_help_button_text"]}";
+                
+                initViewer(
+                    imageId, 
+                    resetWLButtonText, 
+                    resetZoomButtonText, 
+                    resetPanButtonText, 
+                    resetRotationButtonText, 
+                    resetAllButtonText,
+                    helpButtonText,
+                    closeHelpButtonText,
+                    helpDialogTitle,
+                    helpDialogWLMessage,
+                    helpDialogPanMessage,
+                    helpDialogZoomMessage,
+                    helpDialogRotateMessage,
+                    helpDialogRestoreMessage
+                );
             }} 
         }});
     </script>

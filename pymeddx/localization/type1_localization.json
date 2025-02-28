@@ -1,6 +1,5 @@
 {
     "title": "Question",
-    "description": "",
     "question_explanation": "Please choose the option you agree with the most about the displayed fundus image.",
     "positive_answer": "This image displays the signs of background",
     "negative_answer": "I believe that this image does not show any of the listed conditions.",
@@ -15,5 +14,13 @@
     "iview_reset_pan_button_text": "Reset Pan",
     "iview_reset_rotation_button_text": "Reset Rotation",
     "iview_reset_all_button_text": "Reset All",
+    "iview_help_button_text": "Help",
+    "iview_help_dialog_title": "Medical Image Viewer Help",
+    "iview_help_dialog_wl_message": "<b>Window/Level (Brightness/Contrast) Tool</b>: Hold the right mouse button and drag.",
+    "iview_help_dialog_pan_message": "<b>Pan Image Tool</b>: Hold the left mouse button and drag.",
+    "iview_help_dialog_zoom_message": "<b>Zoom In/Out Tool</b>: Scroll the mouse wheel.",
+    "iview_help_dialog_rotate_message": "<b>Rotate Tool</b>: Hold middle mouse click and drag.",
+    "iview_help_dialog_restore_message": "<b>Restore Image Transformations</b>: Click on the appropriate button below the image viewer.",
+    "iview_close_help_button_text": "Close",
     "localization": "en"
 }
