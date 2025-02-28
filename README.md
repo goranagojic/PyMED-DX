@@ -49,6 +49,7 @@ The tool requires the following Python modules:
 - krippendorff
 - pingouin
 - pillow
+- pydicom
 
 The repository also contains `reqirements.txt` for module installation. It is recommended to create pip or conda 
 virtual environments and to install modules inside the environment. The following command shows how to create and 
