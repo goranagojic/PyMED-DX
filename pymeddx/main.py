@@ -4,6 +4,7 @@ import click
 
 import analyzers.visualizations.boxplot as bplot
 import analyzers.visualizations.histogram as hist
+import localization.locale
 from analyzers.metrics.copeland_score import copeland_score
 from analyzers.metrics.diagnostic_score import (DiagnosticScore,
                                                 DiagnosticScores)
@@ -135,7 +136,7 @@ def generate():
 
 
 @generate.command(short_help="Generate questions.")
-@click.option('-q', '--qtype', type=int, multiple=True, required=True,
+@click.option('-q', '--qtype', type=int, required=True,
               help="Type of questionnaire the questions are generated for. Currently supported values are 1 and 2.")
 @click.option('-r', '--repeat', type=int, required=False,
               help="Only applies to type 2 questionnaires. This option is used to specify how many times will each "
@@ -147,7 +148,8 @@ def questions(qtype, repeat):
     times an image from an image group will repeat.
     """
     print(f"Generating questions.")
-    Questions.generate(question_types=list(qtype), n_repeat=repeat)
+    localization.locale.update_locale_data(qtype)
+    Questions.generate(qtype=qtype, n_repeat=repeat)
 
 
 @generate.command(short_help="Generate questionnaires.")
@@ -166,6 +168,7 @@ def questionnaire(qtype, qsubtype, nquestionnaire, kquestions):
     Generate questionnaires of specified type from the database questions.
     """
     logger.info("Starting questionnaire generation...")
+    localization.locale.update_locale_data(qtype)
     if qtype == 1:
         survey_gen = SGen1(survey_type=qsubtype, questions_per_survey=kquestions)
         survey_gen.generate_all(n_surveys=nquestionnaire)
@@ -193,6 +196,7 @@ def export(directory, format, qtype, qsubtype):
     supports questionnaire export in json and html formats.
     """
     logger.info("Starting questionnaire export...")
+    localization.locale.update_locale_data(qtype)
     if qtype == 1:
         SGen1.export_surveys(directory, export_type=format, survey_type=qsubtype)
     elif qtype == 2:

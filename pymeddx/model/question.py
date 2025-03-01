@@ -2,6 +2,7 @@ import base64
 import random
 import itertools
 import json
+import localization.locale
 from PIL import Image as PillowImage
 
 from datetime import datetime
@@ -16,8 +17,6 @@ from utils.logger import logger
 from utils.tools import minify_json, fisher_yates_shuffle
 from model.image import Images
 from model.diagnosis import Diagnoses
-
-from localization.locale import *
 
 
 class Question(Base):
@@ -85,13 +84,14 @@ class QuestionType1(Question):
 
     @staticmethod
     def _get_questions():
+        locale = localization.locale.get_locale_data()
         diagnoses = Diagnoses.get_all()
         questions_json = ""
         for i, diagnosis in enumerate(diagnoses):
             template = Template(f"""
             {{
                 value: "$token",
-                text: "{type1_locale_data["positive_answer"]} $name."
+                text: "{locale["positive_answer"]} $name."
             }},
             """).substitute({"token": diagnosis.token, "name": diagnosis.name})
             questions_json += template
@@ -99,10 +99,10 @@ class QuestionType1(Question):
             
             {{
                 value: "none",
-                text: "{type1_locale_data["negative_answer"]}"
+                text: "{locale["negative_answer"]}"
             }}, {{
                 value: "not_applicable",
-                text: "{type1_locale_data["unclear_image_answer"]}" 
+                text: "{locale["unclear_image_answer"]}" 
             }}
             """).substitute({})
         return questions_json
@@ -114,6 +114,7 @@ class QuestionType1(Question):
         # $imname - ime slike koja se prikazuje, mora da se nalazi u images direktorijumu
         # $imfname - puno ime slike sa ekstenzijom
         # $questions - izgenerisani json za bolesti na slici
+        locale = localization.locale.get_locale_data()
         template = Template(f"""
         elements: [
             {{
@@ -126,8 +127,8 @@ class QuestionType1(Question):
                 name: "s^_^-q$quid-choice",
                 isRequired: true,
                 state: "expanded",
-                title: "{type1_locale_data["question_explanation"]}",
-                requiredErrorText: "{type1_locale_data["error_text"]}",
+                title: "{locale["question_explanation"]}",
+                requiredErrorText: "{locale["error_text"]}",
                 choices: [
                     $questions
                 ]
@@ -136,13 +137,13 @@ class QuestionType1(Question):
                 type: "rating",
                 name: "s^_^-q$quid-certainty",
                 state: "expanded",
-                title: "{type1_locale_data["certainty_question"]}",
-                requiredErrorText: "{type1_locale_data["error_text"]}",
+                title: "{locale["certainty_question"]}",
+                requiredErrorText: "{locale["error_text"]}",
                 isRequired: true,
                 rateMin: 1,
                 rateMax: 5,
-                minRateDescription: "{type1_locale_data["min_certain"]}",
-                maxRateDescription: "{type1_locale_data["max_certain"]}"
+                minRateDescription: "{locale["min_certain"]}",
+                maxRateDescription: "{locale["max_certain"]}"
             }}
         ]
         """)
@@ -238,12 +239,13 @@ class QuestionType2(Question):
         # $im2hash      - base64 hash druge segmentacione mape (slike 2)
         # $imwidth      - sirina slike koja se prikazuje
         # $imheight     - visina slike koja se prikazuje
+        locale = localization.locale.get_locale_data()
         template = Template(f"""
             elements: [
                 {{
                     type: "imagepicker",
                     name: "s^_^-q$quid-im$im1id-im$im2id-img",
-                    title: "{type2_locale_data["original_title"]}",
+                    title: "{locale["reference_image"]}",
                     hideNumber: true,
                     choices: [
                     {{
@@ -258,7 +260,7 @@ class QuestionType2(Question):
                 {{
                     type: "imagepicker",
                     name: "s^_^-q$quid-im$im1id-im$im2id-impicker",
-                    title: "{type2_locale_data["answer_choice_title"]}",
+                    title: "{locale["answer_choice_title"]}",
                     hideNumber: true,
                     choices: [
                     {{
@@ -271,7 +273,7 @@ class QuestionType2(Question):
                     }}
                     ],
                     isRequired: true,
-                    requiredErrorText: "{type2_locale_data["error_text"]}",
+                    requiredErrorText: "{locale["error_text"]}",
                     startWithNewLine: false,
                     imageTag: "segmaps"
                 }}
@@ -487,7 +489,7 @@ class Questions:
         return questions
 
     @staticmethod
-    def generate(question_types, n_repeat, image_names=None):
+    def generate(qtype, n_repeat, image_names=None):
         """
         Generate questions of a given type for a given set of images. If set of images
         is specified, it must be provided as a list of image filenames. If not specified
@@ -503,65 +505,61 @@ class Questions:
             are case sensitive.
         :return: A list of generated questions.
         """
-        logger.info(f"Generating questions of types {question_types}.")
-        for qtype in question_types:
-            qtype = int(qtype)
-            if qtype not in [1, 2]:
-                logger.error(f"Cannot generate question of type {qtype}. Valid question types are 1, 2, 3.")
-                raise ValueError(f"Cannot generate question of type {qtype}. Valid question types are 1, 2, 3.")
+        logger.info(f"Generating questions of type {qtype}.")
+        if qtype not in [1, 2]:
+            logger.error(f"Cannot generate question of type {qtype}. Valid question types are 1, 2.")
+            raise ValueError(f"Cannot generate question of type {qtype}. Valid question types are 1, 2.")
 
         questions = list()
-        for qtype in question_types:
-            qtype = int(qtype)
-            if qtype == 1:
-                if image_names is None:
-                    images = Images.get_all()
-                else:
-                    images = Images.get_by_name(image_names)
-                logger.info(f"Loaded {len(images)} images for question generation.")
-
-                for image in images:
-                    qt = QuestionType1()
-                    qt.image = image
-                    questions.append(qt)
-                Questions.bulk_insert(questions=questions)
-            elif qtype == 2:
-                min_group_id = Images.get_min_image_group()
-                if min_group_id is None:
-                    logger.error(f"Skipping question generation because there are no groups associated with the "
-                                 f"images.")
-                    raise ValueError(logger.error(f"Skipping question generation because there are no groups associated"
-                                                  f" with the images."))
-
-                max_group_id = Images.get_max_image_group()
-                for gid in range(min_group_id, max_group_id+1):
-                    image_group = Images.get_whole_group(gid)
-                    if image_group is None:
-                        logger.error(f"There are no images associated with a group {gid}. Aborting.")
-                        raise ValueError(f"There are no images associated with a group {gid}. Aborting.")
-                    qt = Questions.generate_questions_t2(gid, image_group, n_repeat)
-                    questions.extend(qt)
-
-                n_model = len(Images.get_whole_group(min_group_id))
-                n_images = max_group_id - min_group_id + 1
-                ssize_inter = n_images * (n_model * (n_model - 1)) // 2
-
-                logger.info("")
-                logger.info("*" * 100)
-                logger.info(f"Expected sample size for inter-observer agreement methods is {ssize_inter} (per observer).")
-                ssize_intra = ssize_inter // 2
-                logger.info(f"Expected sample size for intra-observer agreement methods is {ssize_intra} (per observer).")
-                logger.info(f"Use the reported sample sizes if you want to check if the sample size is large enough to produce "
-                            f"reliable results for inter- and intra-observer agreement methods and desired significance "
-                            f"level, effect size, and statistical power. For Cohen's kappa and Krippendorff's alpha use "
-                            f"the reported sample size for inter-observer agreement. For Cronbach's alpha, Guttman's "
-                            f"lambda, and ICC use the sample reported for intra-observer agreement. To do that, we "
-                            f"recommend using specialized software for sample size calculation, e.g. GPower "
-                            f"(https://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower), "
-                            f"or online calculators such as Sample Size Calculator (https://wnarifin.github.io/ssc_web.html).")
-                logger.info("*" * 100)
+        if qtype == 1:
+            if image_names is None:
+                images = Images.get_all()
             else:
-                logger.error(f"Unsupported question type '{qtype}'.")
+                images = Images.get_by_name(image_names)
+            logger.info(f"Loaded {len(images)} images for question generation.")
+
+            for image in images:
+                qt = QuestionType1()
+                qt.image = image
+                questions.append(qt)
+            Questions.bulk_insert(questions=questions)
+        elif qtype == 2:
+            min_group_id = Images.get_min_image_group()
+            if min_group_id is None:
+                logger.error(f"Skipping question generation because there are no groups associated with the "
+                                f"images.")
+                raise ValueError(logger.error(f"Skipping question generation because there are no groups associated"
+                                                f" with the images."))
+
+            max_group_id = Images.get_max_image_group()
+            for gid in range(min_group_id, max_group_id+1):
+                image_group = Images.get_whole_group(gid)
+                if image_group is None:
+                    logger.error(f"There are no images associated with a group {gid}. Aborting.")
+                    raise ValueError(f"There are no images associated with a group {gid}. Aborting.")
+                qt = Questions.generate_questions_t2(gid, image_group, n_repeat)
+                questions.extend(qt)
+
+            n_model = len(Images.get_whole_group(min_group_id))
+            n_images = max_group_id - min_group_id + 1
+            ssize_inter = n_images * (n_model * (n_model - 1)) // 2
+
+            logger.info("")
+            logger.info("*" * 100)
+            logger.info(f"Expected sample size for inter-observer agreement methods is {ssize_inter} (per observer).")
+            ssize_intra = ssize_inter // 2
+            logger.info(f"Expected sample size for intra-observer agreement methods is {ssize_intra} (per observer).")
+            logger.info(f"Use the reported sample sizes if you want to check if the sample size is large enough to produce "
+                        f"reliable results for inter- and intra-observer agreement methods and desired significance "
+                        f"level, effect size, and statistical power. For Cohen's kappa and Krippendorff's alpha use "
+                        f"the reported sample size for inter-observer agreement. For Cronbach's alpha, Guttman's "
+                        f"lambda, and ICC use the sample reported for intra-observer agreement. To do that, we "
+                        f"recommend using specialized software for sample size calculation, e.g. GPower "
+                        f"(https://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower), "
+                        f"or online calculators such as Sample Size Calculator (https://wnarifin.github.io/ssc_web.html).")
+            logger.info("*" * 100)
+        else:
+            logger.error(f"Unsupported question type '{qtype}'.")
 
         logger.info(f"Generated {len(questions)} questions.")
         # Questions.bulk_insert(questions)

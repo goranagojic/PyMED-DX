@@ -1,7 +1,10 @@
 {
-    "original_title": "Reference image",
+    "title": "Question",
+    "description": "",
+    "reference_image": "Reference image",
     "answer_choice_title": "Image choice",
     "error_text": "Please choose one of the two segmentation maps.",
+    "thank_you_message": "Thank you for completing the questionnaire!",
     "iview_reset_wl_button_text": "Reset W/L",
     "iview_reset_zoom_button_text": "Reset Zoom",
     "iview_reset_pan_button_text": "Reset Pan",

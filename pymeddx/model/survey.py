@@ -4,7 +4,7 @@ from pathlib import Path
 from string import Template
 
 import regex as re
-from localization.locale import *
+import localization.locale
 from sqlalchemy import (Column, Date, DateTime, ForeignKey, Integer, String,
                         Text)
 from sqlalchemy.orm import relationship
@@ -157,6 +157,7 @@ class Survey(Base):
         """
 
     def _generate(self, survey_type=None):
+        locale = localization.locale.get_locale_data()
         survey_json = "{ pages: ["
 
         # generate authorization page
@@ -177,7 +178,7 @@ class Survey(Base):
         survey_json += f",surveyID: {str(self.id)},"
         survey_json += "questionErrorLocation: \"bottom\",showProgressBar: \"top\"," \
                        "progressBarType: \"pages\",goNextPageAutomatic: false," \
-                       f"completedHtml: \"{type1_locale_data['thank_you_message']}<br>\"}}"
+                       f"completedHtml: \"{locale['thank_you_message']}<br>\"}}"
                        #"<a href='./anketa.php'>Pređite na sledeću anketu</a>\"}"
 
         return survey_json
@@ -189,13 +190,14 @@ class Survey(Base):
     def _get_page_template(self):
         # $pid - survey page id
         # $questions - questions json
-        description = type1_locale_data.get("description")
+        locale = localization.locale.get_locale_data()
+        description = locale.get("description")
         if description is None:
             return Template(f"""
             {{
                 name: "page-$pid",
                 $questions,
-                title: "{type1_locale_data["title"]} $pid"
+                title: "{locale["title"]} $pid"
             }}
             """)
         else:
@@ -203,7 +205,7 @@ class Survey(Base):
             {{
                 name: "page-$pid",
                 $questions,
-                title: "{type1_locale_data["title"]} $pid",
+                title: "{locale["title"]} $pid",
                 description: "{description}"
             }}
             """)

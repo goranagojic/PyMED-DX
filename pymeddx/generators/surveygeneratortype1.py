@@ -1,5 +1,6 @@
 import regex as re
 import shutil
+import localization.locale
 
 from random import randint
 from pathlib import Path
@@ -10,8 +11,6 @@ from model.question import *
 from utils.database import session
 from utils.logger import logger
 from utils.tools import fisher_yates_shuffle, load_js
-
-from localization.locale import type1_locale_data
 
 
 class SurveyGenerator:
@@ -262,6 +261,7 @@ class SurveyGenerator:
         # $image_viewer_js - a source code of a js library for medical image visualization
         # $survey_json - survey json string saved in a database
         # $jqueryselector - is to be substitutes with "$" as a workaround
+        locale = localization.locale.get_locale_data()
         return Template(f"""
 <body>
     <!-- replace this with built-in js code -->
@@ -315,7 +315,7 @@ class SurveyGenerator:
         // Initialize the survey and replace the onComplete handler
         var survey = new Survey.Model(surveyJSON);
                         
-        survey.locale = "{type1_locale_data["localization"]}"
+        survey.locale = "{locale["localization"]}"
         
         $jqueryselector("#surveyContainer").Survey({{
             model: survey,
@@ -326,19 +326,19 @@ class SurveyGenerator:
             if (options.question.name.includes('-img')) {{
                 let imgElement = options.htmlElement.querySelector('#base64');
                 let imageId = imgElement.src;
-                let resetWLButtonText = "{type1_locale_data["iview_reset_wl_button_text"]}";
-                let resetZoomButtonText = "{type1_locale_data["iview_reset_zoom_button_text"]}";
-                let resetPanButtonText = "{type1_locale_data["iview_reset_pan_button_text"]}";
-                let resetRotationButtonText = "{type1_locale_data["iview_reset_rotation_button_text"]}";
-                let resetAllButtonText = "{type1_locale_data["iview_reset_all_button_text"]}";
-                let helpButtonText = "{type1_locale_data["iview_help_button_text"]}";
-                let helpDialogTitle = "{type1_locale_data["iview_help_dialog_title"]}";
-                let helpDialogWLMessage = "{type1_locale_data["iview_help_dialog_wl_message"]}";
-                let helpDialogPanMessage = "{type1_locale_data["iview_help_dialog_pan_message"]}";
-                let helpDialogZoomMessage = "{type1_locale_data["iview_help_dialog_zoom_message"]}";
-                let helpDialogRotateMessage = "{type1_locale_data["iview_help_dialog_rotate_message"]}";
-                let helpDialogRestoreMessage = "{type1_locale_data["iview_help_dialog_restore_message"]}";
-                let closeHelpButtonText = "{type1_locale_data["iview_close_help_button_text"]}";
+                let resetWLButtonText = "{locale["iview_reset_wl_button_text"]}";
+                let resetZoomButtonText = "{locale["iview_reset_zoom_button_text"]}";
+                let resetPanButtonText = "{locale["iview_reset_pan_button_text"]}";
+                let resetRotationButtonText = "{locale["iview_reset_rotation_button_text"]}";
+                let resetAllButtonText = "{locale["iview_reset_all_button_text"]}";
+                let helpButtonText = "{locale["iview_help_button_text"]}";
+                let helpDialogTitle = "{locale["iview_help_dialog_title"]}";
+                let helpDialogWLMessage = "{locale["iview_help_dialog_wl_message"]}";
+                let helpDialogPanMessage = "{locale["iview_help_dialog_pan_message"]}";
+                let helpDialogZoomMessage = "{locale["iview_help_dialog_zoom_message"]}";
+                let helpDialogRotateMessage = "{locale["iview_help_dialog_rotate_message"]}";
+                let helpDialogRestoreMessage = "{locale["iview_help_dialog_restore_message"]}";
+                let closeHelpButtonText = "{locale["iview_close_help_button_text"]}";
                 
                 initViewer(
                     imageId, 
