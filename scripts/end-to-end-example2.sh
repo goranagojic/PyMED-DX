@@ -41,7 +41,7 @@ command "Step 5: Export questionnaires to html." "python ${TOOLHOME}/main.py exp
 # we have prepared a database and some results to show how to
 # load and analyze them.
 read -p $'DISCLAIMER! At this stage, the questionnaires exported in the previous step,\nshould be completed by human experts. For the purposes of an end-to-end\npipeline demonstration, we provide prefilled questionnaires along with a\ncorresponding database file, which will be downloaded in this step. After\nthis the demonstration will proceed to the response import process.\nPress ENTER to continue or press CTRL+C to abort.\n'
-wget 'https://drive.usercontent.google.com/download?id=1hWfYeN2rRHg3uBFlAJXRzwfqfGEJqm0_&export=download&authuser=1&confirm=t' -O "${TOOLHOME}/database/survey.db"
+wget 'https://drive.usercontent.google.com/download?id=17nm4GUisruuU4CMNinpxBNhofwuOcwKR&export=download&authuser=1&confirm=t' -O "${TOOLHOME}/database/survey.db"
 
 # Import results
 command "Step 6: Load responses to the database." "python ${TOOLHOME}/main.py load responses --directory ${PROJECTHOME}/examples/qtype2/responses --qtype 2"
