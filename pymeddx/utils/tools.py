@@ -90,7 +90,7 @@ def load_dicom(dicom_path):
             logger.error(f"Error: Modality '{modality}' is not supported.")
             return None
 
-        logger.info(f"Info: DICOM modality '{modality}' is supported. Loading image...")
+        logger.debug(f"Info: DICOM modality '{modality}' is supported. Loading image...")
 
         # Extract the image
         image = dicom_data.pixel_array
@@ -117,7 +117,7 @@ def load_dicom(dicom_path):
 
         # Save the image
         Image.fromarray(scaled_image).save(output_path)
-        logger.info(f"Saved extracted image to: '{output_path}.'")
+        logger.debug(f"Saved extracted image to: '{output_path}.'")
 
         return image
 

@@ -20,4 +20,4 @@ file_handler = logging.FileHandler(LOG_FILE_PATH)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
